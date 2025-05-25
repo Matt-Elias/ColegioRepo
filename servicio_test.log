@@ -1,0 +1,36 @@
+2025-05-25T12:19:00.944-06:00  INFO 16356 --- [ColegioProyect] [main] c.e.C.ColegioProyectApplication          : Starting ColegioProyectApplication using Java 23 with PID 16356 (C:\Users\corey\Downloads\ColegioProyect\ColegioProyect\target\classes started by corey in C:\Users\corey\Downloads\ColegioProyect\ColegioProyect)
+2025-05-25T12:19:00.949-06:00  INFO 16356 --- [ColegioProyect] [main] c.e.C.ColegioProyectApplication          : No active profile set, falling back to 1 default profile: "default"
+2025-05-25T12:19:02.382-06:00  INFO 16356 --- [ColegioProyect] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-05-25T12:19:02.427-06:00  INFO 16356 --- [ColegioProyect] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 25 ms. Found 0 JPA repository interfaces.
+2025-05-25T12:19:03.552-06:00  INFO 16356 --- [ColegioProyect] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-05-25T12:19:03.585-06:00  INFO 16356 --- [ColegioProyect] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-05-25T12:19:03.585-06:00  INFO 16356 --- [ColegioProyect] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.41]
+2025-05-25T12:19:03.706-06:00  INFO 16356 --- [ColegioProyect] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-05-25T12:19:03.707-06:00  INFO 16356 --- [ColegioProyect] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2634 ms
+2025-05-25T12:19:04.059-06:00  INFO 16356 --- [ColegioProyect] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-05-25T12:19:04.244-06:00  INFO 16356 --- [ColegioProyect] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.15.Final
+2025-05-25T12:19:04.377-06:00  INFO 16356 --- [ColegioProyect] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-05-25T12:19:05.065-06:00  INFO 16356 --- [ColegioProyect] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-05-25T12:19:05.151-06:00  INFO 16356 --- [ColegioProyect] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-05-25T12:19:07.301-06:00  INFO 16356 --- [ColegioProyect] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@16c5b50a
+2025-05-25T12:19:07.306-06:00  INFO 16356 --- [ColegioProyect] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-05-25T12:19:07.442-06:00  WARN 16356 --- [ColegioProyect] [main] org.hibernate.orm.deprecation            : HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-05-25T12:19:07.444-06:00  WARN 16356 --- [ColegioProyect] [main] org.hibernate.orm.deprecation            : HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2025-05-25T12:19:07.506-06:00  INFO 16356 --- [ColegioProyect] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-05-25T12:19:08.346-06:00  INFO 16356 --- [ColegioProyect] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-05-25T12:19:08.359-06:00  INFO 16356 --- [ColegioProyect] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-05-25T12:19:08.462-06:00  WARN 16356 --- [ColegioProyect] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-05-25T12:19:09.471-06:00  INFO 16356 --- [ColegioProyect] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-05-25T12:19:09.487-06:00  INFO 16356 --- [ColegioProyect] [main] c.e.C.ColegioProyectApplication          : Started ColegioProyectApplication in 9.62 seconds (process running for 12.513)
+2025-05-25T12:23:43.763-06:00  INFO 16356 --- [ColegioProyect] [SpringApplicationShutdownHook] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2025-05-25T12:23:43.789-06:00  INFO 16356 --- [ColegioProyect] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2025-05-25T12:23:43.806-06:00  INFO 16356 --- [ColegioProyect] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-05-25T12:23:43.812-06:00  INFO 16356 --- [ColegioProyect] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-05-25T12:23:43.831-06:00  INFO 16356 --- [ColegioProyect] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
