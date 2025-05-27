@@ -1,5 +1,7 @@
 package com.example.ColegioProyect.Idiomas.Model;
 
+import com.example.ColegioProyect.Materias.Model.Materia;
+import com.example.ColegioProyect.Niveles.Model.Nivel;
 import jakarta.persistence.*;
 
 @Entity
@@ -16,8 +18,11 @@ public class Idioma {
     @Column(name = "metodoCalificacion", columnDefinition = "VARCHAR(45)")
     private String metodoCalificacion;
 
-    @Column(name = "conceptosPeriodo", columnDefinition = "VARCHAR(45)")
-    private String conceptosPeriodo;
+    @OneToOne
+    private Nivel nivel;
+
+    @OneToOne
+    private Materia materia;
 
     public Idioma() {}
 

@@ -1,8 +1,13 @@
 package com.example.ColegioProyect.Conversaciones.Model;
 
+import com.example.ColegioProyect.Mensajes.Model.Mensaje;
+import com.example.ColegioProyect.Padres.Model.Padre;
+import com.example.ColegioProyect.Profesores.Model.Profesor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "conversacion")
@@ -20,7 +25,16 @@ public class Conversacion {
     @Temporal(TemporalType.TIMESTAMP)
     private Date ultimoMensaje;
 
-    public Conversacion() {}
+    @ManyToOne
+    private Padre padre;
 
+    @OneToMany(mappedBy = "conversaciones")
+    @JsonIgnore
+    private List<Mensaje> mensaje;
+
+    @ManyToOne
+    private Profesor profesor;
+
+    public Conversacion() {}
 
 }

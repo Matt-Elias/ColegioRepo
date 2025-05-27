@@ -1,8 +1,13 @@
 package com.example.ColegioProyect.Niveles.Model;
 
+import com.example.ColegioProyect.Grado_grupo.Model.GradoGrupo;
+import com.example.ColegioProyect.Idiomas.Model.Idioma;
+import com.example.ColegioProyect.Periodos.Model.Periodo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "nivel")
@@ -19,41 +24,22 @@ public class Nivel {
     @Temporal(TemporalType.TIMESTAMP)
     private Date cicloEscolar;
 
+    @OneToOne(mappedBy = "nivel")
+    @JsonIgnore
+    private Periodo periodo;
+
+    @OneToMany(mappedBy = "nivel")
+    @JsonIgnore
+    private List<GradoGrupo> gradoGrupo;
+
+    @OneToOne(mappedBy = "nivel")
+    @JsonIgnore
+    private Idioma idioma;
+
     public Nivel() {}
 
-    public Nivel(String nombreNivelAcademico, Date cicloEscolar) {
-        this.nombreNivelAcademico = nombreNivelAcademico;
-        this.cicloEscolar = cicloEscolar;
-    }
 
-    public Nivel(Long idNivel, String nombreNivelAcademico, Date cicloEscolar) {
-        this.idNivel = idNivel;
-        this.nombreNivelAcademico = nombreNivelAcademico;
-        this.cicloEscolar = cicloEscolar;
-    }
 
-    public Long getIdNivel() {
-        return idNivel;
-    }
 
-    public void setIdNivel(Long idNivel) {
-        this.idNivel = idNivel;
-    }
-
-    public String getNombreNivelAcademico() {
-        return nombreNivelAcademico;
-    }
-
-    public void setNombreNivelAcademico(String nombreNivelAcademico) {
-        this.nombreNivelAcademico = nombreNivelAcademico;
-    }
-
-    public Date getCicloEscolar() {
-        return cicloEscolar;
-    }
-
-    public void setCicloEscolar(Date cicloEscolar) {
-        this.cicloEscolar = cicloEscolar;
-    }
 
 }

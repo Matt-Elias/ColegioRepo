@@ -1,5 +1,8 @@
 package com.example.ColegioProyect.Materias.Model;
 
+import com.example.ColegioProyect.Idiomas.Model.Idioma;
+import com.example.ColegioProyect.Profesores.Model.Profesor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -15,6 +18,13 @@ public class Materia {
 
     @Column(name = "asignaciones", columnDefinition = "INT")
     private int asignaciones;
+
+    @ManyToOne
+    private Profesor profesor;
+
+    @OneToOne(mappedBy = "materia")
+    @JsonIgnore
+    private Idioma idioma;
 
     public Materia() {}
 

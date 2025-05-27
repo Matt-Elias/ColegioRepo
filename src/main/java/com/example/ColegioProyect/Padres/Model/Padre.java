@@ -1,6 +1,11 @@
 package com.example.ColegioProyect.Padres.Model;
 
+import com.example.ColegioProyect.Conversaciones.Model.Conversacion;
+import com.example.ColegioProyect.Usuarios.Model.Usuario;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "padre")
@@ -10,6 +15,13 @@ public class Padre {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idPadre;
 
+    @OneToOne (mappedBy = "padre")
+    @JsonIgnore
+    private Usuario usuario;
+
+    @OneToMany(mappedBy = "padre")
+    @JsonIgnore
+    private List<Conversacion> conversacion;
 
     public Padre() {}
 

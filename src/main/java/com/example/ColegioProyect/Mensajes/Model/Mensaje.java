@@ -1,5 +1,6 @@
 package com.example.ColegioProyect.Mensajes.Model;
 
+import com.example.ColegioProyect.Conversaciones.Model.Conversacion;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -21,6 +22,9 @@ public class Mensaje {
 
     @Column(name = "leido", columnDefinition = "BOOL DEFAULT TRUE")
     private boolean leido;
+
+    @ManyToOne
+    private Conversacion conversacion;
 
     public Mensaje() {}
 
