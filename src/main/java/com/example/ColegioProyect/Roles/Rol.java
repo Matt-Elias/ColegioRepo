@@ -7,35 +7,40 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "roles")
-public class Role {
+@Table(name = "rol")
+public class Rol {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idRol;
+    private Long id;
 
     @Column(nullable = false, unique = true)
-    private String nameRol;
+    private String rol;
 
     @ManyToMany(mappedBy = "roles")
     private Set<Usuario> usuarios = new HashSet<>();
 
-    public Role () {}
+    public Rol() {}
 
-    public Long getIdRol() {
-        return idRol;
+    public Rol(String rol) {
+        this.rol = rol;
     }
 
-    public void setIdRol(Long idRol) {
-        this.idRol = idRol;
+    public Long getId() {
+        return id;
     }
 
-    public String getNameRol() {
-        return nameRol;
+    public void setId(Long id) {
+        this.id = id;
+
     }
 
-    public void setNameRol(String nameRol) {
-        this.nameRol = nameRol;
+    public String getRol() {
+        return rol;
+    }
+
+    public void setRol(String rol) {
+        this.rol = rol;
     }
 
     public Set<Usuario> getUsuarios() {

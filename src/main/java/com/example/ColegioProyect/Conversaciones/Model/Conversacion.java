@@ -28,7 +28,7 @@ public class Conversacion {
     @ManyToOne
     private Padre padre;
 
-    @OneToMany(mappedBy = "conversaciones")
+    @OneToMany(mappedBy = "conversacion")
     @JsonIgnore
     private List<Mensaje> mensaje;
 
