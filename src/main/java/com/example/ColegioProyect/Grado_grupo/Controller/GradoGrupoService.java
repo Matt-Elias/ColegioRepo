@@ -4,7 +4,6 @@ import com.example.ColegioProyect.Grado_grupo.Model.GradoGrupo;
 import com.example.ColegioProyect.Grado_grupo.Model.GradoGrupoDTO;
 import com.example.ColegioProyect.Grado_grupo.Model.GradoGrupoRepository;
 import com.example.ColegioProyect.Niveles.Model.Nivel;
-import com.example.ColegioProyect.Niveles.Model.NivelDTO;
 import com.example.ColegioProyect.Niveles.Model.NivelRepository;
 import com.example.ColegioProyect.Utils.Message;
 import com.example.ColegioProyect.Utils.TypesResponse;
@@ -54,7 +53,7 @@ public class GradoGrupoService {
 
         Optional<Nivel> optionalNivel = nivelRepository.findById(gradoGrupoDTO.getNivel().getIdNivel());
         if (!optionalNivel.isPresent()) {
-            return new ResponseEntity<>(new Message("El id del nivel no existe", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new Message("No se encontro el nivel o no existe", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }
 
         GradoGrupo gradoGrupo = new GradoGrupo(gradoGrupoDTO.getGradoGrupo(), true, optionalNivel.get());
