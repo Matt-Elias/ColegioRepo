@@ -61,33 +61,21 @@ public class Usuario {
 
     public Usuario() {}
 
-    public Usuario(String nombreCompleto, String correoElectronico, String tipoUsuario, boolean status, String contrasena, Set<Rol> roles, Date fechaAlta, Estudiante estudiante, Evento evento, Padre padre, Profesor profesor) {
+    public Usuario(String nombreCompleto, String correoElectronico, String tipoUsuario, boolean status, String contrasena) {
         this.nombreCompleto = nombreCompleto;
         this.correoElectronico = correoElectronico;
         this.tipoUsuario = tipoUsuario;
         this.status = status;
         this.contrasena = contrasena;
-        this.roles = roles;
-        this.fechaAlta = fechaAlta;
-        this.estudiante = estudiante;
-        this.evento = evento;
-        this.padre = padre;
-        this.profesor = profesor;
     }
 
-    public Usuario(Long idUsuario, String nombreCompleto, String correoElectronico, String tipoUsuario, boolean status, String contrasena, Set<Rol> roles, Date fechaAlta, Estudiante estudiante, Evento evento, Padre padre, Profesor profesor) {
+    public Usuario(Long idUsuario, String nombreCompleto, String correoElectronico, String tipoUsuario, boolean status, String contrasena) {
         this.idUsuario = idUsuario;
         this.nombreCompleto = nombreCompleto;
         this.correoElectronico = correoElectronico;
         this.tipoUsuario = tipoUsuario;
         this.status = status;
         this.contrasena = contrasena;
-        this.roles = roles;
-        this.fechaAlta = fechaAlta;
-        this.estudiante = estudiante;
-        this.evento = evento;
-        this.padre = padre;
-        this.profesor = profesor;
     }
 
     public Long getIdUsuario() {

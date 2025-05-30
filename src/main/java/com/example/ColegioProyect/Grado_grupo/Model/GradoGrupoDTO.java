@@ -12,7 +12,7 @@ public class GradoGrupoDTO {
     @NotBlank(groups = {RegistradGradoGrupo.class, ModificarGradoGrupo.class}, message = "Es necesario el grado y grupo")
     private String gradoGrupo;
 
-    @NotNull(groups = {RegistradGradoGrupo.class, ModificarGradoGrupo.class}, message = "Es necesario el objeto de nivel")
+    @NotNull(groups = {RegistradGradoGrupo.class, ModificarGradoGrupo.class}, message = "Es necesario el nivel")
     private Nivel nivel;
 
     public GradoGrupoDTO() {}

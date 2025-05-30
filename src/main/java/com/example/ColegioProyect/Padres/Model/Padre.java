@@ -25,4 +25,31 @@ public class Padre {
 
     public Padre() {}
 
+    public Long getIdPadre() {
+        return idPadre;
+    }
+
+    public void setIdPadre(Long idPadre) {
+        this.idPadre = idPadre;
+    }
+
+    public Padre(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public List<Conversacion> getConversacion() {
+        return conversacion;
+    }
+
+    public void setConversacion(List<Conversacion> conversacion) {
+        this.conversacion = conversacion;
+    }
 }

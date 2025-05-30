@@ -30,4 +30,36 @@ public class Profesor {
 
     public Profesor() {}
 
+    public Long getIdProfesor() {
+        return idProfesor;
+    }
+
+    public void setIdProfesor(Long idProfesor) {
+        this.idProfesor = idProfesor;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public List<Materia> getMateria() {
+        return materia;
+    }
+
+    public void setMateria(List<Materia> materia) {
+        this.materia = materia;
+    }
+
+    public List<Conversacion> getConversacion() {
+        return conversacion;
+    }
+
+    public void setConversacion(List<Conversacion> conversacion) {
+        this.conversacion = conversacion;
+    }
+
 }
