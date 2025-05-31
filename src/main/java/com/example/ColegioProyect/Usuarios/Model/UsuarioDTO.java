@@ -25,6 +25,8 @@ public class UsuarioDTO {
     @NotBlank(groups = {RegistrarUsuario.class, IniciarSesion.class}, message = "Es necesario la contraseña")
     private String contrasena;
 
+    private String urlImagen;
+
     //@NotNull(groups = {RegistrarUsuario.class, ModificarUsuario.class}, message = "Es necesario el estudiante")
     private Estudiante estudiante;
 
@@ -74,6 +76,14 @@ public class UsuarioDTO {
 
     public void setContrasena(String contrasena) {
         this.contrasena = contrasena;
+    }
+
+    public String getUrlImagen() {
+        return urlImagen;
+    }
+
+    public void setUrlImagen(String urlImagen) {
+        this.urlImagen = urlImagen;
     }
 
     public Estudiante getEstudiante() {

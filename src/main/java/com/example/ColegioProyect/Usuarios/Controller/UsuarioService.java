@@ -78,12 +78,17 @@ public class UsuarioService {
             return new ResponseEntity<>(new Message("La contraseña excede los 30 caracteres", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }
 
+        usuarioDTO.setUrlImagen(usuarioDTO.getUrlImagen());
+        if (usuarioDTO.getUrlImagen().length() > 70) {
+            return new ResponseEntity<>(new Message("La url de la imagen no puede exceder los 70 caracteres", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        }
+
         Optional<Usuario> optionalUsuario = usuarioRepository.searchByCorreoElectronico(usuarioDTO.getCorreoElectronico(), 0L);
         if (optionalUsuario.isPresent()) {
             return new ResponseEntity<>(new Message("El correo ya existe, porfavor cambielo por otro", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }
 
-        Usuario usuario = new Usuario(usuarioDTO.getNombreCompleto(), usuarioDTO.getCorreoElectronico(),usuarioDTO.getTipoUsuario(), true, usuarioDTO.getContrasena() );
+        Usuario usuario = new Usuario(usuarioDTO.getNombreCompleto(), usuarioDTO.getCorreoElectronico(),usuarioDTO.getTipoUsuario(), true, usuarioDTO.getContrasena(), usuarioDTO.getUrlImagen());
         usuario = usuarioRepository.saveAndFlush(usuario);
 
         if (usuario == null) {
@@ -170,6 +175,11 @@ public class UsuarioService {
             return new ResponseEntity<>(new Message("La contraseña excede los 30 caracteres", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }
 
+        usuarioDTO.setUrlImagen(usuarioDTO.getUrlImagen());
+        if (usuarioDTO.getUrlImagen().length() > 70) {
+            return new ResponseEntity<>(new Message("La url de la imagen no puede exceder los 70 caracteres", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        }
+
         Optional<Usuario> optional = usuarioRepository.findById(usuarioDTO.getIdUsuario());
         if (!optional.isPresent()) {
             return new ResponseEntity<>(new Message("El usuario no se encontro o no existe",TypesResponse.WARNING), HttpStatus.NOT_FOUND);
@@ -179,6 +189,7 @@ public class UsuarioService {
         usuario.setNombreCompleto(usuarioDTO.getNombreCompleto());
         usuario.setTipoUsuario(usuarioDTO.getTipoUsuario());
         usuario.setContrasena(usuarioDTO.getContrasena());
+        usuario.setUrlImagen(usuarioDTO.getUrlImagen());
         usuario = usuarioRepository.saveAndFlush(usuario);
 
         if (usuario == null) {

@@ -35,6 +35,9 @@ public class Usuario {
     @Column(name = "contrasena", columnDefinition = "VARCHAR(45)")
     private String contrasena;
 
+    @Column(name = "contrasena", columnDefinition = "VARCHAR(70)")
+    private String urlImagen;
+
     //APARTADO PARA ROL
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -66,21 +69,23 @@ public class Usuario {
 
     public Usuario() {}
 
-    public Usuario(String nombreCompleto, String correoElectronico, String tipoUsuario, boolean status, String contrasena) {
+    public Usuario(String nombreCompleto, String correoElectronico, String tipoUsuario, boolean status, String contrasena, String urlImagen) {
         this.nombreCompleto = nombreCompleto;
         this.correoElectronico = correoElectronico;
         this.tipoUsuario = tipoUsuario;
         this.status = status;
         this.contrasena = contrasena;
+        this.urlImagen = urlImagen;
     }
 
-    public Usuario(Long idUsuario, String nombreCompleto, String correoElectronico, String tipoUsuario, boolean status, String contrasena) {
+    public Usuario(Long idUsuario, String nombreCompleto, String correoElectronico, String tipoUsuario, boolean status, String contrasena, String urlImagen) {
         this.idUsuario = idUsuario;
         this.nombreCompleto = nombreCompleto;
         this.correoElectronico = correoElectronico;
         this.tipoUsuario = tipoUsuario;
         this.status = status;
         this.contrasena = contrasena;
+        this.urlImagen = urlImagen;
     }
 
     public Long getIdUsuario() {
@@ -178,4 +183,13 @@ public class Usuario {
     public void setProfesor(Profesor profesor) {
         this.profesor = profesor;
     }
+
+    public String getUrlImagen() {
+        return urlImagen;
+    }
+
+    public void setUrlImagen(String urlImagen) {
+        this.urlImagen = urlImagen;
+    }
+
 }
