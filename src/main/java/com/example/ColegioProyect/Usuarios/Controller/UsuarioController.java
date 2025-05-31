@@ -25,7 +25,7 @@ public class UsuarioController {
     }
 
     @PostMapping("/crearUsuario")
-    public ResponseEntity<Object> crearUsuario(@Validated({UsuarioDTO.RegistrarUsuario.class, UsuarioDTO.RegistrarNombre.class, UsuarioDTO.RegistrarTipoUsuario.class})@RequestBody UsuarioDTO usuarioDTO) {
+    public ResponseEntity<Object> crearUsuario(@Validated({UsuarioDTO.RegistrarUsuario.class})@RequestBody UsuarioDTO usuarioDTO) {
         return usuarioService.registrarUsuario(usuarioDTO);
     }
 

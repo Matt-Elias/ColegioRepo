@@ -3,6 +3,7 @@ package com.example.ColegioProyect.Profesores.Model;
 import com.example.ColegioProyect.Conversaciones.Model.Conversacion;
 import com.example.ColegioProyect.Materias.Model.Materia;
 import com.example.ColegioProyect.Usuarios.Model.Usuario;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -16,7 +17,10 @@ public class Profesor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idProfesor;
 
-    @OneToOne(mappedBy = "profesor")
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "id_profesor")
+    @JsonBackReference
     @JsonIgnore
     private Usuario usuario;
 

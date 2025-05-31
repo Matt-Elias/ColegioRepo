@@ -14,6 +14,9 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     @Query(value = "SELECT * FROM usuario WHERE correo_electronico LIKE ?1 AND id_usuario != ?2 LIMIT 1", nativeQuery = true)
     Optional<Usuario> searchByCorreoElectronico(String correo_electronico, Long id_usuario);
 
+    @Query(value = "SELECT * FROM usuario WHERE tipo_usuario like 'Profesor%'", nativeQuery = true)
+    Optional<Usuario> searchByTipoUsuarioAndProfesor(String tipo_usuario);
+
     /*Optional<Estudiante> searchByEstudiante(Long idEstudiante);
 
     Optional<Padre> searchByPadre(Long idPadre);

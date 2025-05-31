@@ -90,6 +90,51 @@ public class UsuarioService {
             return new ResponseEntity<>(new Message("Error al registrar usuario", TypesResponse.ERROR), HttpStatus.BAD_REQUEST);
         }
 
+        switch (usuarioDTO.getTipoUsuario().trim().toLowerCase()) {
+            case "estudiante":
+
+                Estudiante estudiante = new Estudiante();
+                estudiante.setUsuario(usuario);
+                estudiante.setMatricula(usuarioDTO.getEstudiante().getMatricula());
+                estudiante.setTipo(usuarioDTO.getEstudiante().getTipo());
+                estudiante.setGradoGrupo(usuarioDTO.getEstudiante().getGradoGrupo());
+                estudiante = estudianteRepository.saveAndFlush(estudiante);
+                break;
+
+            case "padre":
+
+                //Recuperamos el id del estudiante (objeto estudiante) ya creado y lo validamos
+                Optional<Estudiante> estudiantePadre = estudianteRepository.findById(usuarioDTO.getEstudiante().getIdEstudiante());
+                if (!estudiantePadre.isPresent()) {
+                    return new ResponseEntity<>(new Message("El estudiante no existe", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+                }
+
+                /*Optional<Usuario> usuarioPadre = usuarioRepository.findById(usuarioDTO.getEstudiante().getIdEstudiante());
+                if (!usuarioPadre.isPresent()) {
+                    return new ResponseEntity<>(new Message("El usuario estudiante no existe", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+                }*/
+
+                Padre padre = new Padre(usuario, estudiantePadre.get());
+                //Padre padre = new Padre(usuario.getIdUsuario(), usuarioPadre.get(), estudiantePadre.get());
+
+                padre = padreRepository.saveAndFlush(padre);
+
+                if (padre == null) {
+                    return new ResponseEntity<>(new Message("Error al registrar padre", TypesResponse.ERROR), HttpStatus.BAD_REQUEST);
+                }
+
+                break;
+
+            case "profesor":
+                Profesor profesor = new Profesor();
+                profesor.setUsuario(usuario);
+                profesor = profesorRespository.saveAndFlush(profesor);
+                break;
+
+                default:
+                    return new ResponseEntity<>(new Message("Tipo de usuario desconicido", TypesResponse.ERROR), HttpStatus.BAD_REQUEST);
+        }
+
         return new ResponseEntity<>(new Message(usuario, "Se registro el usuario correctamente", TypesResponse.SUCCESS), HttpStatus.OK);
     }
 
@@ -130,14 +175,8 @@ public class UsuarioService {
             return new ResponseEntity<>(new Message("El usuario no se encontro o no existe",TypesResponse.WARNING), HttpStatus.NOT_FOUND);
         }
 
-        /*Optional<Usuario> optionalUsuario = usuarioRepository.searchByCorreoElectronico(usuarioDTO.getCorreoElectronico(), 0L);
-        if (optionalUsuario.isPresent()) {
-            return new ResponseEntity<>(new Message("El correo ya existe, porfavor cambielo por otro", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
-        }*/
-
         Usuario usuario = optional.get();
         usuario.setNombreCompleto(usuarioDTO.getNombreCompleto());
-        //usuario.setCorreoElectronico(usuarioDTO.getCorreoElectronico());
         usuario.setTipoUsuario(usuarioDTO.getTipoUsuario());
         usuario.setContrasena(usuarioDTO.getContrasena());
         usuario = usuarioRepository.saveAndFlush(usuario);

@@ -5,6 +5,7 @@ import com.example.ColegioProyect.Eventos.Model.Evento;
 import com.example.ColegioProyect.Padres.Model.Padre;
 import com.example.ColegioProyect.Profesores.Model.Profesor;
 import com.example.ColegioProyect.Roles.Rol;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -47,16 +48,20 @@ public class Usuario {
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaAlta;
 
-    @OneToOne
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.PERSIST)
+    //@JsonManagedReference
     private Estudiante estudiante;
 
     @OneToOne
     private Evento evento;
 
-    @OneToOne
+    //Con cascadeType hara que las operaciones aplicadas a una entidad se progaguen automaticamente a sus entidades relacionadas
+    @OneToOne(mappedBy = "usuario")
+    //@JsonManagedReference
     private Padre padre;
 
-    @OneToOne
+    @OneToOne(mappedBy = "usuario")
+    @JsonManagedReference
     private Profesor profesor;
 
     public Usuario() {}

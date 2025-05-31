@@ -12,27 +12,27 @@ public class UsuarioDTO {
     @NotNull(groups = {ModificarUsuario.class, CambiarStatus.class, CerrarSesion.class}, message = "Es necesario el id del usuario")
     private Long idUsuario;
 
-    @NotNull(groups = {RegistrarUsuario.class, ModificarUsuario.class, RegistrarNombre.class}, message = "Es necesario el nombre")
+    @NotBlank(groups = {RegistrarUsuario.class, ModificarUsuario.class}, message = "Es necesario el nombre")
     private String nombreCompleto;
 
     @NotBlank(groups = {RegistrarUsuario.class, ModificarUsuario.class, IniciarSesion.class}, message = "Es necesario un correo electronico")
     @Email(groups = {RegistrarUsuario.class, ModificarUsuario.class, IniciarSesion.class}, message = "Es necesario que el formato sea un correo electronico")
     private String correoElectronico;
 
-    @NotNull(groups = {RegistrarUsuario.class, ModificarUsuario.class, RegistrarTipoUsuario.class}, message = "Es necesario un tipo de usuario")
+    @NotBlank(groups = {RegistrarUsuario.class, ModificarUsuario.class}, message = "Es necesario un tipo de usuario")
     private String tipoUsuario;
 
     @NotBlank(groups = {RegistrarUsuario.class, IniciarSesion.class}, message = "Es necesario la contraseña")
     private String contrasena;
 
-    /*@NotNull(groups = {RegistrarUsuario.class, ModificarUsuario.class}, message = "Es necesario el estudiante")
+    //@NotNull(groups = {RegistrarUsuario.class, ModificarUsuario.class}, message = "Es necesario el estudiante")
     private Estudiante estudiante;
 
-    @NotNull(groups = {RegistrarUsuario.class, ModificarUsuario.class}, message = "Es necesario el padre")
+    //@NotNull(groups = {RegistrarUsuario.class, ModificarUsuario.class}, message = "Es necesario el padre")
     private Padre padre;
 
-    @NotNull(groups = {RegistrarUsuario.class, ModificarUsuario.class}, message = "Es necesario el profesor")
-    private Profesor profesor;*/
+    //@NotNull(groups = {RegistrarUsuario.class, ModificarUsuario.class}, message = "Es necesario el profesor")
+    private Profesor profesor;
 
     public UsuarioDTO () {}
 
@@ -76,7 +76,7 @@ public class UsuarioDTO {
         this.contrasena = contrasena;
     }
 
-    /*public Estudiante getEstudiante() {
+    public Estudiante getEstudiante() {
         return estudiante;
     }
 
@@ -98,14 +98,12 @@ public class UsuarioDTO {
 
     public void setProfesor(Profesor profesor) {
         this.profesor = profesor;
-    }*/
+    }
 
     public interface RegistrarUsuario {}
     public interface ModificarUsuario {}
     public interface CambiarStatus {}
     public interface IniciarSesion {}
     public interface CerrarSesion {}
-    public interface RegistrarTipoUsuario {}
-    public interface RegistrarNombre {}
 
 }
