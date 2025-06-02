@@ -1,0 +1,39 @@
+[1mdiff --git a/src/main/java/com/example/ColegioProyect/Usuarios/Controller/UsuarioService.java b/src/main/java/com/example/ColegioProyect/Usuarios/Controller/UsuarioService.java[m
+[1mindex 540abb9..4ba4aec 100644[m
+[1m--- a/src/main/java/com/example/ColegioProyect/Usuarios/Controller/UsuarioService.java[m
+[1m+++ b/src/main/java/com/example/ColegioProyect/Usuarios/Controller/UsuarioService.java[m
+[36m@@ -233,27 +233,22 @@[m [mpublic class UsuarioService {[m
+             usuario.setFechaAlta(new Date());[m
+             usuario.setTipoUsuario("profesor");[m
+ [m
+[31m-            //Primero se guarda el usuario[m
+[31m-            Usuario usuarioGuardado = usuarioRepository.saveAndFlush(usuario);[m
+[31m-[m
+[31m-            //Creamos el profesor y lo asociamos al usuaraio guardado[m
+[32m+[m[32m            //Creamos el profesor antes de guardarlo[m
+             Profesor profesor = new Profesor();[m
+[31m-            profesor.setUsuario(usuarioGuardado);[m
+[31m-[m
+[31m-            //Guardamos el profesor[m
+[31m-            Profesor profesorGuardado = profesorRespository.saveAndFlush(profesor);[m
+[32m+[m[32m            usuario.setProfesor(profesor);[m
+[32m+[m[32m            profesor.setUsuario(usuario);[m
+ [m
+[31m-            //Actualizamos la referencia en el usuario[m
+[31m-            usuarioGuardado.setProfesor(profesorGuardado);[m
+[31m-            usuarioRepository.saveAndFlush(usuarioGuardado);[m
+[32m+[m[32m            //Guardamos automaticamente (cascade salvara al profesor automaticamente)[m
+[32m+[m[32m            Usuario usuarioGuardado = usuarioRepository.saveAndFlush(usuario);[m
+ [m
+[31m-            response.put("text", "Profesor registrado correctamente");[m
+[32m+[m[32m            response.put("text", "Profesor registrado exitosamente");[m
+             response.put("type", "SUCCESS");[m
+             response.put("result", usuarioGuardado);[m
+ [m
+             return ResponseEntity.ok(response);[m
+ [m
+         } catch (Exception e) {[m
+[32m+[m[32m            e.printStackTrace(); // Para ver el error completo[m
+             response.put("text", "Error al registrar profesor: " + e.getMessage());[m
+             response.put("type", "ERROR");[m
+             return ResponseEntity.badRequest().body(response);[m

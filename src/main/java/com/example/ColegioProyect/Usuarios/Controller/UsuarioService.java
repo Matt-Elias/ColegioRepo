@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -46,9 +47,32 @@ public class UsuarioService {
         return new ResponseEntity<>(new Message(usuarioRepository.findAll(), "Listado de usuarios", TypesResponse.SUCCESS), HttpStatus.OK);
     }
 
+    @Transactional
+    public ResponseEntity<Object> estudiantesConPadres(){
+        logger.info("Ejecutando funcion de: Estudiantes con padres");
+        List<Object[]> resultado = usuarioRepository.findEstudiantesConPadresRaw();
+
+        if (resultado.isEmpty()) {
+            return new ResponseEntity<>(new Message("No se encontraron datos de estudiantes con padres", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(new Message(usuarioRepository.findAll(), "Listado de estudiantes con padres", TypesResponse.SUCCESS), HttpStatus.OK);
+    }
+
+    @Transactional
+    public ResponseEntity<Object> padresConEstudiantes(){
+        logger.info("Ejecutando funcion de: Padres con estudiantes");
+        List<Object[]> resultado = usuarioRepository.findPadresConEstudiantesRaw();
+
+        if (resultado.isEmpty()) {
+            return new ResponseEntity<>(new Message("No se encontraron datos de padres con estudiantes", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(new Message(usuarioRepository.findAll(),"Listado de padres con estudidantes", TypesResponse.SUCCESS), HttpStatus.OK);
+    }
+
+
     @Transactional(rollbackFor = {SQLException.class})
     public ResponseEntity<Object> registrarUsuario(UsuarioDTO usuarioDTO) {
-        logger.info("Ejecutando funcion de: registrar usuario");
+        logger.info("Ejecutando funcion de: Registrar usuario");
 
         usuarioDTO.setNombreCompleto(usuarioDTO.getNombreCompleto());
         if (usuarioDTO.getNombreCompleto().length() > 45) {
@@ -114,14 +138,7 @@ public class UsuarioService {
                     return new ResponseEntity<>(new Message("El estudiante no existe", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
                 }
 
-                /*Optional<Usuario> usuarioPadre = usuarioRepository.findById(usuarioDTO.getEstudiante().getIdEstudiante());
-                if (!usuarioPadre.isPresent()) {
-                    return new ResponseEntity<>(new Message("El usuario estudiante no existe", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
-                }*/
-
                 Padre padre = new Padre(usuario, estudiantePadre.get());
-                //Padre padre = new Padre(usuario.getIdUsuario(), usuarioPadre.get(), estudiantePadre.get());
-
                 padre = padreRepository.saveAndFlush(padre);
 
                 if (padre == null) {
@@ -145,7 +162,7 @@ public class UsuarioService {
 
     @Transactional(rollbackFor = SQLException.class)
     public ResponseEntity<Object> actualizarUsuarios(UsuarioDTO usuarioDTO) {
-        logger.info("Ejecutando funcion de: actualizar usuarios");
+        logger.info("Ejecutando funcion de: Actualizar usuarios");
 
         usuarioDTO.setNombreCompleto(usuarioDTO.getNombreCompleto());
         if (usuarioDTO.getNombreCompleto().length() > 45) {
@@ -201,7 +218,7 @@ public class UsuarioService {
 
     @Transactional
     public ResponseEntity<Object> cambiarStatusUsuario(UsuarioDTO usuarioDTO) {
-        logger.info("Ejecutando funcion de: cambiarStatusUsuario");
+        logger.info("Ejecutando funcion de: Cambiar Status Usuario");
 
         Optional<Usuario> optionalUsuario = usuarioRepository.findById(usuarioDTO.getIdUsuario());
         if (!optionalUsuario.isPresent()) {
