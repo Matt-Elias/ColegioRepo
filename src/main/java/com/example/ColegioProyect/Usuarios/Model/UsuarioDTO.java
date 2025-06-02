@@ -1,6 +1,8 @@
 package com.example.ColegioProyect.Usuarios.Model;
 
 import com.example.ColegioProyect.Estudiantes.Model.Estudiante;
+import com.example.ColegioProyect.Estudiantes.Model.EstudianteDTO;
+import com.example.ColegioProyect.Grado_grupo.Model.GradoGrupo;
 import com.example.ColegioProyect.Padres.Model.Padre;
 import com.example.ColegioProyect.Profesores.Model.Profesor;
 import jakarta.validation.constraints.Email;
@@ -22,19 +24,26 @@ public class UsuarioDTO {
     @NotBlank(groups = {RegistrarUsuario.class, ModificarUsuario.class}, message = "Es necesario un tipo de usuario")
     private String tipoUsuario;
 
-    @NotBlank(groups = {RegistrarUsuario.class, IniciarSesion.class}, message = "Es necesario la contraseña")
+    @NotBlank(groups = {RegistrarUsuario.class, ModificarUsuario.class,IniciarSesion.class}, message = "Es necesario la contraseña")
     private String contrasena;
 
+    @NotBlank(groups = {RegistrarUsuario.class, ModificarUsuario.class}, message = "Es necesario la URl de la imagen")
     private String urlImagen;
 
-    //@NotNull(groups = {RegistrarUsuario.class, ModificarUsuario.class}, message = "Es necesario el estudiante")
     private Estudiante estudiante;
 
-    //@NotNull(groups = {RegistrarUsuario.class, ModificarUsuario.class}, message = "Es necesario el padre")
     private Padre padre;
 
-    //@NotNull(groups = {RegistrarUsuario.class, ModificarUsuario.class}, message = "Es necesario el profesor")
     private Profesor profesor;
+
+    //@NotBlank(groups = {RegistrarUsuario.class, ModificarUsuario.class}, message = "Es necesario la matricula del estudiante")
+    private String matricula;
+
+    //@NotBlank(groups = {RegistrarUsuario.class, ModificarUsuario.class}, message = "Es necesario el tipo del estudiante ")
+    private String tipo;
+
+    //@NotNull(groups = {RegistrarUsuario.class, ModificarUsuario.class}, message = "Es necesario el grado  y el grupo del estudiante")
+    private GradoGrupo gradoGrupo;
 
     public UsuarioDTO () {}
 
@@ -108,6 +117,30 @@ public class UsuarioDTO {
 
     public void setProfesor(Profesor profesor) {
         this.profesor = profesor;
+    }
+
+    public String getMatricula(){
+        return matricula;
+    }
+
+    public void setMatricula(String matricula){
+        this.matricula = matricula;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public GradoGrupo getGradoGrupo() {
+        return gradoGrupo;
+    }
+
+    public void setGradoGrupo(GradoGrupo gradoGrupo) {
+        this.gradoGrupo = gradoGrupo;
     }
 
     public interface RegistrarUsuario {}

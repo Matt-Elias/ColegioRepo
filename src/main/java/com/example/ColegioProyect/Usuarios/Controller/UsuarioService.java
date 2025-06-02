@@ -75,36 +75,28 @@ public class UsuarioService {
         logger.info("Ejecutando funcion de: Registrar usuario");
 
         usuarioDTO.setNombreCompleto(usuarioDTO.getNombreCompleto());
-        if (usuarioDTO.getNombreCompleto().length() > 45) {
-            return new ResponseEntity<>(new Message("El nombre completo no puede exceder los 45 caracteres", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
-        }
-
-        if (usuarioDTO.getNombreCompleto().isEmpty()) {
-            return new ResponseEntity<>(new Message("El nombre no puede quedar vacio", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        if (usuarioDTO.getNombreCompleto().length() > 45 || usuarioDTO.getNombreCompleto().isEmpty()) {
+            return new ResponseEntity<>(new Message("El nombre completo no puede exceder los 45 caracteres y no debe estar vacio", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }
 
         usuarioDTO.setCorreoElectronico(usuarioDTO.getCorreoElectronico());
-        if (usuarioDTO.getCorreoElectronico().length() > 60) {
-            return new ResponseEntity<>(new Message("El correo no puede exceder los 60 caracteres", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        if (usuarioDTO.getCorreoElectronico().length() > 60 || usuarioDTO.getCorreoElectronico().isEmpty()) {
+            return new ResponseEntity<>(new Message("El correo no puede exceder los 60 caracteres y no debe esta vacio", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }
 
         usuarioDTO.setTipoUsuario(usuarioDTO.getTipoUsuario());
-        if (usuarioDTO.getTipoUsuario().length() > 40) {
-            return new ResponseEntity<>(new Message("El tipo de usuario no puede exceder los 40 caracteres", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
-        }
-
-        if (usuarioDTO.getTipoUsuario().isEmpty()) {
-            return new ResponseEntity<>(new Message("El tipo de usuario no puede quedar vacio", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        if (usuarioDTO.getTipoUsuario().length() > 40 || usuarioDTO.getTipoUsuario().isEmpty()) {
+            return new ResponseEntity<>(new Message("El tipo de usuario no puede exceder los 40 caracteres y no debe estar vacio", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }
 
         usuarioDTO.setContrasena(usuarioDTO.getContrasena());
-        if (usuarioDTO.getContrasena().length() > 30) {
-            return new ResponseEntity<>(new Message("La contraseña excede los 30 caracteres", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        if (usuarioDTO.getContrasena().length() > 30 || usuarioDTO.getContrasena().isEmpty()) {
+            return new ResponseEntity<>(new Message("La contraseña excede los 30 caracteres y no debe estar vacio", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }
 
         usuarioDTO.setUrlImagen(usuarioDTO.getUrlImagen());
-        if (usuarioDTO.getUrlImagen().length() > 70) {
-            return new ResponseEntity<>(new Message("La url de la imagen no puede exceder los 70 caracteres", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        if (usuarioDTO.getUrlImagen().length() > 70 || usuarioDTO.getUrlImagen().isEmpty()) {
+            return new ResponseEntity<>(new Message("La url de la imagen no puede exceder los 70 caracteres y no debe estar vacio", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }
 
         Optional<Usuario> optionalUsuario = usuarioRepository.searchByCorreoElectronico(usuarioDTO.getCorreoElectronico(), 0L);
@@ -121,42 +113,44 @@ public class UsuarioService {
 
         switch (usuarioDTO.getTipoUsuario().trim().toLowerCase()) {
             case "estudiante":
-
                 Estudiante estudiante = new Estudiante();
                 estudiante.setUsuario(usuario);
                 estudiante.setMatricula(usuarioDTO.getEstudiante().getMatricula());
                 estudiante.setTipo(usuarioDTO.getEstudiante().getTipo());
                 estudiante.setGradoGrupo(usuarioDTO.getEstudiante().getGradoGrupo());
                 estudiante = estudianteRepository.saveAndFlush(estudiante);
+                if (estudiante == null) {
+                    return new ResponseEntity<>(new Message("Erro al registrar estudiante",TypesResponse.ERROR), HttpStatus.BAD_REQUEST);
+                }
                 break;
 
             case "padre":
-
                 //Recuperamos el id del estudiante (objeto estudiante) ya creado y lo validamos
                 Optional<Estudiante> estudiantePadre = estudianteRepository.findById(usuarioDTO.getEstudiante().getIdEstudiante());
                 if (!estudiantePadre.isPresent()) {
-                    return new ResponseEntity<>(new Message("El estudiante no existe", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+                    return new ResponseEntity<>(new Message("El estudiante no se enocntro o no existe", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
                 }
-
                 Padre padre = new Padre(usuario, estudiantePadre.get());
                 padre = padreRepository.saveAndFlush(padre);
 
                 if (padre == null) {
                     return new ResponseEntity<>(new Message("Error al registrar padre", TypesResponse.ERROR), HttpStatus.BAD_REQUEST);
                 }
-
                 break;
 
             case "profesor":
                 Profesor profesor = new Profesor();
                 profesor.setUsuario(usuario);
                 profesor = profesorRespository.saveAndFlush(profesor);
+
+                if (profesor == null) {
+                    return new ResponseEntity<>(new Message("Error al registrar profesor", TypesResponse.ERROR), HttpStatus.BAD_REQUEST);
+                }
                 break;
 
                 default:
                     return new ResponseEntity<>(new Message("Tipo de usuario desconicido", TypesResponse.ERROR), HttpStatus.BAD_REQUEST);
         }
-
         return new ResponseEntity<>(new Message(usuario, "Se registro el usuario correctamente", TypesResponse.SUCCESS), HttpStatus.OK);
     }
 
@@ -165,36 +159,28 @@ public class UsuarioService {
         logger.info("Ejecutando funcion de: Actualizar usuarios");
 
         usuarioDTO.setNombreCompleto(usuarioDTO.getNombreCompleto());
-        if (usuarioDTO.getNombreCompleto().length() > 45) {
-            return new ResponseEntity<>(new Message("El nombre completo no puede exceder los 45 caracteres", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
-        }
-
-        if (usuarioDTO.getNombreCompleto().isEmpty()) {
-            return new ResponseEntity<>(new Message("El nombre no puede quedar vacio", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        if (usuarioDTO.getNombreCompleto().length() > 45 || usuarioDTO.getNombreCompleto().isEmpty()) {
+            return new ResponseEntity<>(new Message("El nombre completo no puede exceder los 45 caracteres y no debe estar vacio", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }
 
         usuarioDTO.setCorreoElectronico(usuarioDTO.getCorreoElectronico());
-        if (usuarioDTO.getCorreoElectronico().length() > 60) {
-            return new ResponseEntity<>(new Message("El correo no puede exceder los 60 caracteres", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        if (usuarioDTO.getCorreoElectronico().length() > 60 || usuarioDTO.getCorreoElectronico().isEmpty()) {
+            return new ResponseEntity<>(new Message("El correo no puede exceder los 60 caracteres y no debe estar vacio", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }
 
         usuarioDTO.setTipoUsuario(usuarioDTO.getTipoUsuario());
-        if (usuarioDTO.getTipoUsuario().length() > 40) {
-            return new ResponseEntity<>(new Message("El tipo de usuario no puede exceder los 40 caracteres", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
-        }
-
-        if (usuarioDTO.getTipoUsuario().isEmpty()) {
-            return new ResponseEntity<>(new Message("El tipo de usuario no puede quedar vacio", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        if (usuarioDTO.getTipoUsuario().length() > 40 || usuarioDTO.getTipoUsuario().isEmpty()) {
+            return new ResponseEntity<>(new Message("El tipo de usuario no puede exceder los 40 caracteres y no debe estar vacio", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }
 
         usuarioDTO.setContrasena(usuarioDTO.getContrasena());
-        if (usuarioDTO.getContrasena().length() > 30) {
-            return new ResponseEntity<>(new Message("La contraseña excede los 30 caracteres", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        if (usuarioDTO.getContrasena().length() > 30 || usuarioDTO.getContrasena().isEmpty()) {
+            return new ResponseEntity<>(new Message("La contraseña no debe exceder los 30 caracteres y no debe ser estar vacio", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }
 
         usuarioDTO.setUrlImagen(usuarioDTO.getUrlImagen());
-        if (usuarioDTO.getUrlImagen().length() > 70) {
-            return new ResponseEntity<>(new Message("La url de la imagen no puede exceder los 70 caracteres", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        if (usuarioDTO.getUrlImagen().length() > 70 || usuarioDTO.getUrlImagen().isEmpty()) {
+            return new ResponseEntity<>(new Message("La url de la imagen no puede exceder los 70 caracteres y no debe estar vacio", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }
 
         Optional<Usuario> optional = usuarioRepository.findById(usuarioDTO.getIdUsuario());
@@ -213,6 +199,80 @@ public class UsuarioService {
             return new ResponseEntity<>(new Message("Error al registrar usuario", TypesResponse.ERROR), HttpStatus.BAD_REQUEST);
         }
 
+        switch (usuarioDTO.getTipoUsuario().trim().toLowerCase()) {
+            case "estudiante":
+                Optional<Estudiante> optionalEstudiante = estudianteRepository.findById(usuario.getIdUsuario());
+                Estudiante estudiante;
+
+                if (optionalEstudiante.isPresent()) {
+                    estudiante = optionalEstudiante.get();
+                } else {
+                    estudiante = new Estudiante();
+                    estudiante.setUsuario(usuario);
+                }
+
+                estudiante.setMatricula(usuarioDTO.getEstudiante().getMatricula());
+                if (usuarioDTO.getTipoUsuario().equalsIgnoreCase("estudiante")){
+                    if (usuarioDTO.getEstudiante() == null || usuarioDTO.getEstudiante().getMatricula().isEmpty()) {
+                        return new ResponseEntity(new Message("Es necesario agregar la matricula del estudiante", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+                    }
+                }
+
+                estudiante.setTipo(usuarioDTO.getEstudiante().getTipo());
+                if (usuarioDTO.getTipoUsuario().equalsIgnoreCase("estudiante")){
+                    if (usuarioDTO.getEstudiante() == null || usuarioDTO.getEstudiante().getTipo().isEmpty()) {
+                        return new ResponseEntity(new Message("Es necesario agregar el tipo del estudiante", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+                    }
+                }
+
+                estudiante.setGradoGrupo(usuarioDTO.getEstudiante().getGradoGrupo());
+                if (usuarioDTO.getTipoUsuario().equalsIgnoreCase("estudiante")) {
+                    if (usuarioDTO.getEstudiante() == null || usuarioDTO.getEstudiante().getGradoGrupo().isStatus()) {
+                     return new ResponseEntity<>(new Message("Es necesario agregar el grado y el grupo del estudiante", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+                    }
+                }
+
+                estudiante = estudianteRepository.saveAndFlush(estudiante);
+                if (estudiante == null) {
+                    return new ResponseEntity<>(new Message("Error al modificar usuario estudiante", TypesResponse.ERROR), HttpStatus.BAD_REQUEST);
+                }
+            break;
+
+            case "padre":
+                Optional<Padre> optionalPadre = padreRepository.findById(usuario.getIdUsuario());
+                if (!optionalPadre.isPresent()) {
+                    return new ResponseEntity<>(new Message("El padre no se encontro o no existe", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
+                }
+
+                Optional<Estudiante> estudianteOptional = estudianteRepository.findById(usuarioDTO.getEstudiante().getIdEstudiante());
+                if (!estudianteOptional.isPresent()) {
+                    return new ResponseEntity<>(new Message("El estudiante no se encontro o no existe", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
+                }
+
+                Padre padre = optionalPadre.get();
+                padre.setEstudiante(estudianteOptional.get());
+                padre = padreRepository.saveAndFlush(padre);
+                if (padre == null) {
+                    return new ResponseEntity<>(new Message("Error al registrar padre", TypesResponse.ERROR), HttpStatus.BAD_REQUEST);
+                }
+            break;
+
+            case "profesor":
+                Optional<Profesor> optionalProfesor = profesorRespository.findById(usuario.getIdUsuario());
+                Profesor profesor;
+
+                if (optionalProfesor.isPresent()) {
+                    profesor = optionalProfesor.get();
+                } else {
+                    profesor = new Profesor();
+                    profesor.setUsuario(usuario);
+                }
+                profesorRespository.saveAndFlush(profesor);
+            break;
+
+            default:
+                return new ResponseEntity<>(new Message("No se encontro este tipo de estudiante",TypesResponse.WARNING), HttpStatus.NOT_FOUND);
+        }
         return new ResponseEntity<>(new Message(usuario,"Se modifico el usuario correctamente", TypesResponse.SUCCESS), HttpStatus.OK);
     }
 

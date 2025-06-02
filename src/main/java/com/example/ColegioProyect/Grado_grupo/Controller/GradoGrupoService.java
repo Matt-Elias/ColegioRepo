@@ -75,21 +75,10 @@ public class GradoGrupoService {
             return new ResponseEntity<>(new Message("El grado y el grupo no deben tener mas de 20 caracteres", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }
 
-        /*gradoGrupoDTO.setIdGradoGrupo(gradoGrupoDTO.getIdGradoGrupo());
-        if (gradoGrupoDTO.getIdGradoGrupo().equals(0L) || gradoGrupoDTO.getIdGradoGrupo() == null) {
-            return new ResponseEntity<>(new Message("El id no puede ser 0 o nullo", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
-        }*/
-
         Optional<Nivel> optionalNivel = nivelRepository.findById(gradoGrupoDTO.getNivel().getIdNivel());
         if (!optionalNivel.isPresent()) {
             return new ResponseEntity<>(new Message("El id del nivel no existe", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }
-
-        /*NivelDTO nivelDTO = new NivelDTO();
-        nivelDTO.setIdNivel(nivelDTO.getIdNivel());
-        if (nivelDTO.getIdNivel().equals(0L) || nivelDTO.getIdNivel() == null) {
-            return new ResponseEntity<>(new Message("El id del nivel no puede ser 0 o nullo", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
-        }*/
 
         //GradoGrupo gradoGrupo = optionalGradoGrupo.get();
         Optional<GradoGrupo> optionalGradoGrupo = gradoGrupoRepository.findById(gradoGrupoDTO.getIdGradoGrupo());
