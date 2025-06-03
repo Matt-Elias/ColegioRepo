@@ -296,40 +296,37 @@ public class UsuarioService {
         return new ResponseEntity<>(new Message(usuario, "Se guardo correctamente el usuario", TypesResponse.SUCCESS), HttpStatus.OK);
     }
 
-    /*@Transactional(readOnly = true)
-    public ResponseEntity<Object> obtenerSoloEstudiantes(UsuarioDTO usuarioDTO) {
+    @Transactional(readOnly = true)
+    public ResponseEntity<Object> obtenerSoloEstudiantes() {
         logger.info("Ejecutando la funcion de: obtener solo estudiantes");
+        List<Object[]> soloEstudiantes = usuarioRepository.findAllByEstudiante();
 
-        Optional<Estudiante> optionalEstudiante = usuarioRepository.searchByEstudiante(usuarioDTO.getEstudiante().getIdEstudiante());
-        if (!optionalEstudiante.isPresent()) {
-            return new ResponseEntity<>(new Message("No se encontro el id del estudiante o no existe", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
+        if (soloEstudiantes.isEmpty()) {
+            return new ResponseEntity<>(new Message("No se encontraron estudiantes registrados", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
         }
-
-        return new ResponseEntity<>(new Message("Se encontro el estudiante", TypesResponse.SUCCESS), HttpStatus.OK);
+        return new ResponseEntity<>(new Message(usuarioRepository.findAllByEstudiante(),"Listado de estudiantes", TypesResponse.SUCCESS), HttpStatus.OK);
     }
 
     @Transactional
-    public ResponseEntity<Object> obtenerSoloPadres(UsuarioDTO usuarioDTO) {
+    public ResponseEntity<Object> obtenerSoloPadres() {
         logger.info("Ejecutando funcion de: obtener solo padres");
+        List<Object[]> soloPadres = usuarioRepository.findAllByPadre();
 
-        Optional<Padre> optionalPadre = usuarioRepository.searchByPadre(usuarioDTO.getPadre().getIdPadre());
-        if (!optionalPadre.isPresent()) {
-            return new ResponseEntity<>(new Message("El id del padre nose encontro o no existe",TypesResponse.WARNING), HttpStatus.NOT_FOUND);
+        if (soloPadres.isEmpty()) {
+            return new ResponseEntity<>(new Message("No se encontraron padres registrados",TypesResponse.WARNING), HttpStatus.NOT_FOUND);
         }
-
-        return new ResponseEntity<>(new Message("Se encontro el padre", TypesResponse.SUCCESS), HttpStatus.OK);
+        return new ResponseEntity<>(new Message(usuarioRepository.findAllByPadre(),"Listado de padres", TypesResponse.SUCCESS), HttpStatus.OK);
     }
 
     @Transactional
-    public ResponseEntity<Object> obtenerSoloProfesores(UsuarioDTO usuarioDTO) {
+    public ResponseEntity<Object> obtenerSoloProfesores() {
         logger.info("Ejecutando funcion de: obtener solo profesores");
+        List<Object[]>soloProfesores = usuarioRepository.findAllByProfesor();
 
-        Optional<Profesor> optionalProfesor = usuarioRepository.searchByProfesor(usuarioDTO.getProfesor().getIdProfesor());
-        if (!optionalProfesor.isPresent()) {
-            return new ResponseEntity<>(new Message("El id del profesor no se encontro o no existe", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
+        if (soloProfesores.isEmpty()) {
+            return new ResponseEntity<>(new Message("No se encontraron profesores registrados", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
         }
-
-        return new ResponseEntity<>(new Message("Se encontro el profesor", TypesResponse.SUCCESS), HttpStatus.OK);
-    }*/
+        return new ResponseEntity<>(new Message(usuarioRepository.findAllByProfesor(),"Listado de profesores", TypesResponse.SUCCESS), HttpStatus.OK);
+    }
 
 }

@@ -34,6 +34,21 @@ public class UsuarioController {
         return usuarioService.padresConEstudiantes();
     }
 
+    @GetMapping("/soloEstudiantes")
+    public ResponseEntity<Object>listadoEstudiantes(){
+        return usuarioService.obtenerSoloEstudiantes();
+    }
+
+    @GetMapping("/soloPadres")
+    public ResponseEntity<Object>listadoPadres(){
+        return usuarioService.obtenerSoloPadres();
+    }
+
+    @GetMapping("/soloProfesores")
+    public ResponseEntity<Object>listadoProfesores(){
+        return usuarioService.obtenerSoloProfesores();
+    }
+
     @PostMapping("/crearUsuario")
     public ResponseEntity<Object> crearUsuario(@Validated({UsuarioDTO.RegistrarUsuario.class})@RequestBody UsuarioDTO usuarioDTO) {
         return usuarioService.registrarUsuario(usuarioDTO);
