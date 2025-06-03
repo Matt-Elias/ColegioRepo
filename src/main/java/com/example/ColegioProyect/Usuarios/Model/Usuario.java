@@ -5,11 +5,13 @@ import com.example.ColegioProyect.Eventos.Model.Evento;
 import com.example.ColegioProyect.Padres.Model.Padre;
 import com.example.ColegioProyect.Profesores.Model.Profesor;
 import com.example.ColegioProyect.Roles.Rol;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -55,8 +57,9 @@ public class Usuario {
     //@JsonManagedReference
     private Estudiante estudiante;
 
-    @OneToOne
-    private Evento evento;
+    @OneToMany(mappedBy = "usuario")
+    @JsonIgnore
+    private List<Evento> eventos;
 
     //Con cascadeType hara que las operaciones aplicadas a una entidad se progaguen automaticamente a sus entidades relacionadas
     @OneToOne(mappedBy = "usuario")
@@ -64,7 +67,8 @@ public class Usuario {
     private Padre padre;
 
     @OneToOne(mappedBy = "usuario")
-    @JsonManagedReference
+    //@JsonManagedReference
+    @JsonIgnore
     private Profesor profesor;
 
     public Usuario() {}
@@ -160,12 +164,12 @@ public class Usuario {
         this.estudiante = estudiante;
     }
 
-    public Evento getEvento() {
-        return evento;
+    public List<Evento> getEventos() {
+        return eventos;
     }
 
-    public void setEvento(Evento evento) {
-        this.evento = evento;
+    public void setEventos(List<Evento> eventos) {
+        this.eventos = eventos;
     }
 
     public Padre getPadre() {

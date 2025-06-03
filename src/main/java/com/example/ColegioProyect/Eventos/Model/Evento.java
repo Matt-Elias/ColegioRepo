@@ -1,7 +1,6 @@
 package com.example.ColegioProyect.Eventos.Model;
 
 import com.example.ColegioProyect.Usuarios.Model.Usuario;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -31,13 +30,81 @@ public class Evento {
     @Column(name = "colorEtiqueta", columnDefinition = "VARCHAR(12)")
     private String colorEtiqueta;
 
-    @OneToOne(mappedBy = "evento")
-    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
     public Evento() {}
 
+    public Evento(String titulo, String descripcion, String colorEtiqueta, Usuario usuario) {
+        this.titulo = titulo;
+        this.descripcion = descripcion;
+        this.colorEtiqueta = colorEtiqueta;
+        this.usuario = usuario;
+    }
 
+    public Evento(Long idEvento, String titulo, String descripcion, String colorEtiqueta, Usuario usuario) {
+        this.idEvento = idEvento;
+        this.titulo = titulo;
+        this.descripcion = descripcion;
+        this.colorEtiqueta = colorEtiqueta;
+        this.usuario = usuario;
+    }
 
+    public Long getIdEvento() {
+        return idEvento;
+    }
+
+    public void setIdEvento(Long idEvento) {
+        this.idEvento = idEvento;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public Date getFechaInicio() {
+        return fechaInicio;
+    }
+
+    public void setFechaInicio(Date fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    public Date getFechaFin() {
+        return fechaFin;
+    }
+
+    public void setFechaFin(Date fechaFin) {
+        this.fechaFin = fechaFin;
+    }
+
+    public String getColorEtiqueta() {
+        return colorEtiqueta;
+    }
+
+    public void setColorEtiqueta(String colorEtiqueta) {
+        this.colorEtiqueta = colorEtiqueta;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
 
 }

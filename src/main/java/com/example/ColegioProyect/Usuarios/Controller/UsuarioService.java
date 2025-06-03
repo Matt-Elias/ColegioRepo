@@ -19,7 +19,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Array;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -106,9 +108,15 @@ public class UsuarioService {
 
         Usuario usuario = new Usuario(usuarioDTO.getNombreCompleto(), usuarioDTO.getCorreoElectronico(),usuarioDTO.getTipoUsuario(), true, usuarioDTO.getContrasena(), usuarioDTO.getUrlImagen());
         usuario = usuarioRepository.saveAndFlush(usuario);
-
         if (usuario == null) {
             return new ResponseEntity<>(new Message("Error al registrar usuario", TypesResponse.ERROR), HttpStatus.BAD_REQUEST);
+        }
+
+        List<String> usuariosPermitidos = Arrays.asList("estudiante", "padre", "profesor", "administrador");
+        String tipoUsuario = usuario.getTipoUsuario().trim().toLowerCase();
+
+        if (!usuariosPermitidos.contains(tipoUsuario)) {
+            return new ResponseEntity<>(new Message("Tipo de usuario no valido. Los tipos permitidos son: "+usuariosPermitidos, TypesResponse.ERROR), HttpStatus.BAD_REQUEST);
         }
 
         switch (usuarioDTO.getTipoUsuario().trim().toLowerCase()) {
@@ -146,6 +154,8 @@ public class UsuarioService {
                 if (profesor == null) {
                     return new ResponseEntity<>(new Message("Error al registrar profesor", TypesResponse.ERROR), HttpStatus.BAD_REQUEST);
                 }
+                break;
+            case "administrador":
                 break;
 
                 default:

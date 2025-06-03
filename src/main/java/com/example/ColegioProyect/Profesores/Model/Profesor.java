@@ -20,7 +20,7 @@ public class Profesor {
     @OneToOne
     @MapsId
     @JoinColumn(name = "id_profesor")
-    @JsonBackReference
+    //@JsonBackReference
     @JsonIgnore
     private Usuario usuario;
 
