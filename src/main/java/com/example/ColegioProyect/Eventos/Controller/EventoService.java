@@ -114,6 +114,7 @@ public class EventoService {
         evento.setTitulo(eventoDTO.getTitulo());
         evento.setDescripcion(eventoDTO.getDescripcion());
         evento.setColorEtiqueta(eventoDTO.getColorEtiqueta());
+        evento.setUsuario(usuario);
         if (evento == null) {
             return new ResponseEntity<>(new Message("Error al modificar evento", TypesResponse.ERROR), HttpStatus.BAD_REQUEST);
         }
