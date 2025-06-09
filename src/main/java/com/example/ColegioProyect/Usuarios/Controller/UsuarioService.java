@@ -339,4 +339,10 @@ public class UsuarioService {
         return new ResponseEntity<>(new Message(usuarioRepository.findAllByProfesor(),"Listado de profesores", TypesResponse.SUCCESS), HttpStatus.OK);
     }
 
+    @Transactional
+    public ResponseEntity<Object> obtenerUnUsuario(){
+        logger.info("Ejecutando funcion de: obtener un solo estudiante");
+        return new ResponseEntity<>(new Message("Se obtuvo el usuario", TypesResponse.SUCCESS), HttpStatus.OK);
+    }
+
 }

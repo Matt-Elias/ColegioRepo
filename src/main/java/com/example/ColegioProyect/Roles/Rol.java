@@ -1,6 +1,7 @@
 package com.example.ColegioProyect.Roles;
 
 import com.example.ColegioProyect.Usuarios.Model.Usuario;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -18,6 +19,7 @@ public class Rol {
     private String rol;
 
     @ManyToMany(mappedBy = "roles")
+    @JsonIgnore
     private Set<Usuario> usuarios = new HashSet<>();
 
     public Rol() {}

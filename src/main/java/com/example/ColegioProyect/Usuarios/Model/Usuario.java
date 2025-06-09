@@ -34,7 +34,7 @@ public class Usuario {
     @Column(name = "status", columnDefinition = "BOOL DEFAULT TRUE")
     private boolean status;
 
-    @Column(name = "contrasena", columnDefinition = "VARCHAR(45)")
+    @Column(name = "contrasena", length = 100, nullable = false)
     private String contrasena;
 
     @Column(name = "urlImagen", columnDefinition = "VARCHAR(70)")

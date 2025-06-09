@@ -9,6 +9,8 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.List;
+
 public class UsuarioDTO {
 
     @NotNull(groups = {ModificarUsuario.class, CambiarStatus.class, CerrarSesion.class}, message = "Es necesario el id del usuario")
@@ -44,6 +46,8 @@ public class UsuarioDTO {
 
     //@NotNull(groups = {RegistrarUsuario.class, ModificarUsuario.class}, message = "Es necesario el grado  y el grupo del estudiante")
     private GradoGrupo gradoGrupo;
+
+    private List<String> roles;
 
     public UsuarioDTO () {}
 
@@ -141,6 +145,14 @@ public class UsuarioDTO {
 
     public void setGradoGrupo(GradoGrupo gradoGrupo) {
         this.gradoGrupo = gradoGrupo;
+    }
+
+    public List<String> getRoles (){
+        return roles;
+    }
+
+    public void SetRoles(List<String> roles){
+        this.roles = roles;
     }
 
     public interface RegistrarUsuario {}

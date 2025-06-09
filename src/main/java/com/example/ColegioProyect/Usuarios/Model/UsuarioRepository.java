@@ -88,4 +88,8 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
             "on u_profesor.id_usuario = p.id_profesor", nativeQuery = true)
     List<Object[]>findAllByProfesor();
 
+
+    Optional<Usuario> findByCorreoElectronico(String correoElectronico);
+
+    boolean existsByCorreoElectronico(String correoElectronico);
 }
