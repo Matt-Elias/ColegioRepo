@@ -41,7 +41,7 @@ public class GradoGrupoService {
     public ResponseEntity<Object> agregarGradoGrupo (GradoGrupoDTO gradoGrupoDTO) {
         logger.info("Ejecutando funcion de: Agregar grado grupo");
 
-        gradoGrupoDTO.setGradoGrupo(gradoGrupoDTO.getGradoGrupo().toLowerCase());
+        gradoGrupoDTO.setGradoGrupo(gradoGrupoDTO.getGradoGrupo());
         if (gradoGrupoDTO.getGradoGrupo().length() > 20) {
             return new ResponseEntity<>(new Message("El nombre del grado y grupo no puede exceder los 20 caracteres", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }
@@ -70,7 +70,7 @@ public class GradoGrupoService {
     public ResponseEntity<Object> modificarGradoGrupo (GradoGrupoDTO gradoGrupoDTO) {
         logger.info("Ejecutando funcion de: Modificar grado grupo");
 
-        gradoGrupoDTO.setGradoGrupo(gradoGrupoDTO.getGradoGrupo().toLowerCase());
+        gradoGrupoDTO.setGradoGrupo(gradoGrupoDTO.getGradoGrupo());
         if (gradoGrupoDTO.getGradoGrupo().length() > 20) {
             return new ResponseEntity<>(new Message("El grado y el grupo no deben tener mas de 20 caracteres", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }

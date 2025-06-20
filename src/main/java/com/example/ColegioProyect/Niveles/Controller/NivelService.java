@@ -64,7 +64,7 @@ public class NivelService {
     public ResponseEntity<Object> actualizarNivel(NivelDTO nivelDTO){
         logger.info("Ejecutando funcion de Actualizar Nivel");
 
-        nivelDTO.setNivelAcademico(nivelDTO.getNivelAcademico().toLowerCase());
+        nivelDTO.setNivelAcademico(nivelDTO.getNivelAcademico());
 
         if (nivelDTO.getNivelAcademico().length() > 60) {
             logger.info("El nivel no puede exceder los 60 caracteres");

@@ -97,8 +97,13 @@ public class UsuarioService {
         }
 
         usuarioDTO.setUrlImagen(usuarioDTO.getUrlImagen());
-        if (usuarioDTO.getUrlImagen().length() > 70 || usuarioDTO.getUrlImagen().isEmpty()) {
-            return new ResponseEntity<>(new Message("La url de la imagen no puede exceder los 70 caracteres y no debe estar vacio", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        if (usuarioDTO.getUrlImagen().isEmpty()) {
+            return new ResponseEntity<>(new Message("La url de la imagen no debe estar vacia", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        }
+
+        usuarioDTO.setUrlImagen(usuarioDTO.getUrlImagen());
+        if (usuarioDTO.getUrlImagen().length() > 2048){
+            return new ResponseEntity<>(new Message("La url de la imagen no puede exceder los 2048 caracteres ", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }
 
         Optional<Usuario> optionalUsuario = usuarioRepository.searchByCorreoElectronico(usuarioDTO.getCorreoElectronico(), 0L);
@@ -189,8 +194,13 @@ public class UsuarioService {
         }
 
         usuarioDTO.setUrlImagen(usuarioDTO.getUrlImagen());
-        if (usuarioDTO.getUrlImagen().length() > 70 || usuarioDTO.getUrlImagen().isEmpty()) {
-            return new ResponseEntity<>(new Message("La url de la imagen no puede exceder los 70 caracteres y no debe estar vacio", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        if (usuarioDTO.getUrlImagen().isEmpty()) {
+            return new ResponseEntity<>(new Message("La url de la imagen no debe estar vacia", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        }
+
+        usuarioDTO.setUrlImagen(usuarioDTO.getUrlImagen());
+        if (usuarioDTO.getUrlImagen().length() > 2048){
+            return new ResponseEntity<>(new Message("La url de la imagen no puede exceder los 2048 caracteres ", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }
 
         Optional<Usuario> optional = usuarioRepository.findById(usuarioDTO.getIdUsuario());

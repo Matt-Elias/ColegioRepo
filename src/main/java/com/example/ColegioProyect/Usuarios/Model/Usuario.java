@@ -37,7 +37,7 @@ public class Usuario {
     @Column(name = "contrasena", length = 100, nullable = false)
     private String contrasena;
 
-    @Column(name = "urlImagen", columnDefinition = "VARCHAR(70)")
+    @Column(name = "urlImagen", columnDefinition = "VARCHAR(2048)")
     private String urlImagen;
 
     //APARTADO PARA ROL
