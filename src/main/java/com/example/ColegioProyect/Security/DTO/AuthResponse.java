@@ -5,12 +5,14 @@ public class AuthResponse {
     private Long usuarioId;
     private String correoElectronico;
     private long expiracion;
+    private String tipoUsuario;
 
-    public AuthResponse(String token, Long usuarioId, String correoElectronico, long expiracion) {
+    public AuthResponse(String token, Long usuarioId, String correoElectronico, long expiracion, String tipoUsuario) {
         this.token = token;
         this.usuarioId = usuarioId;
         this.correoElectronico = correoElectronico;
         this.expiracion = expiracion;
+        this.tipoUsuario = tipoUsuario;
     }
 
     public String getToken() {
@@ -43,5 +45,13 @@ public class AuthResponse {
 
     public void setExpiracion(long expiracion) {
         this.expiracion = expiracion;
+    }
+
+    public String getTipoUsuario() {
+        return tipoUsuario;
+    }
+
+    public void setTipoUsuario(String tipoUsuario) {
+        this.tipoUsuario = tipoUsuario;
     }
 }

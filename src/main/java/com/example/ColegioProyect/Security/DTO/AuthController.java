@@ -50,7 +50,8 @@ public class AuthController {
                 .orElseThrow(() -> new Exception("Usuario no encontrado"));
 
         long expirationTime = jwtUtil.getExpirationTime();
-        AuthResponse authResponse = new AuthResponse(jwt, usuario.getIdUsuario(), usuario.getCorreoElectronico(), expirationTime);
+        //AuthResponse authResponse = new AuthResponse(jwt, usuario.getIdUsuario(), usuario.getCorreoElectronico(), expirationTime);
+        AuthResponse authResponse = new AuthResponse(jwt, usuario.getIdUsuario(), usuario.getCorreoElectronico(), expirationTime, usuario.getTipoUsuario());
 
         return new ResponseEntity<>(new Message(authResponse, "Sesion iniciada correctamente. Bienvenido", TypesResponse.SUCCESS), HttpStatus.OK);
     }

@@ -29,7 +29,7 @@ public class UsuarioDTO {
     @NotBlank(groups = {RegistrarUsuario.class, ModificarUsuario.class,IniciarSesion.class}, message = "Es necesario la contraseña")
     private String contrasena;
 
-    @NotBlank(groups = {RegistrarUsuario.class, ModificarUsuario.class}, message = "Es necesario la URl de la imagen")
+    /*@NotBlank(groups = {RegistrarUsuario.class, ModificarUsuario.class}, message = "Es necesario la URl de la imagen")*/
     private String urlImagen;
 
     private Estudiante estudiante;

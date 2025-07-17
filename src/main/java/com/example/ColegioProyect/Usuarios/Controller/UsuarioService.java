@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,13 +35,15 @@ public class UsuarioService {
     public final EstudianteRepository estudianteRepository;
     public final PadreRepository padreRepository;
     public final ProfesorRespository profesorRespository;
+    public final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UsuarioService(UsuarioRepository usuarioRepository, EstudianteRepository estudianteRepository, PadreRepository padreRepository, ProfesorRespository profesorRespository) {
+    public UsuarioService(UsuarioRepository usuarioRepository, EstudianteRepository estudianteRepository, PadreRepository padreRepository, ProfesorRespository profesorRespository, PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
         this.estudianteRepository = estudianteRepository;
         this.padreRepository = padreRepository;
         this.profesorRespository = profesorRespository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional(readOnly = true)
@@ -71,7 +74,6 @@ public class UsuarioService {
         return new ResponseEntity<>(new Message(usuarioRepository.findAll(),"Listado de padres con estudidantes", TypesResponse.SUCCESS), HttpStatus.OK);
     }
 
-
     @Transactional(rollbackFor = {SQLException.class})
     public ResponseEntity<Object> registrarUsuario(UsuarioDTO usuarioDTO) {
         logger.info("Ejecutando funcion de: Registrar usuario");
@@ -97,11 +99,6 @@ public class UsuarioService {
         }
 
         usuarioDTO.setUrlImagen(usuarioDTO.getUrlImagen());
-        if (usuarioDTO.getUrlImagen().isEmpty()) {
-            return new ResponseEntity<>(new Message("La url de la imagen no debe estar vacia", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
-        }
-
-        usuarioDTO.setUrlImagen(usuarioDTO.getUrlImagen());
         if (usuarioDTO.getUrlImagen().length() > 2048){
             return new ResponseEntity<>(new Message("La url de la imagen no puede exceder los 2048 caracteres ", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }
@@ -111,7 +108,9 @@ public class UsuarioService {
             return new ResponseEntity<>(new Message("El correo ya existe, porfavor cambielo por otro", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }
 
-        Usuario usuario = new Usuario(usuarioDTO.getNombreCompleto(), usuarioDTO.getCorreoElectronico(),usuarioDTO.getTipoUsuario(), true, usuarioDTO.getContrasena(), usuarioDTO.getUrlImagen());
+        String contrasenaEncriptada = passwordEncoder.encode(usuarioDTO.getContrasena());
+
+        Usuario usuario = new Usuario(usuarioDTO.getNombreCompleto(), usuarioDTO.getCorreoElectronico(),usuarioDTO.getTipoUsuario(), true, contrasenaEncriptada, usuarioDTO.getUrlImagen());
         usuario = usuarioRepository.saveAndFlush(usuario);
         if (usuario == null) {
             return new ResponseEntity<>(new Message("Error al registrar usuario", TypesResponse.ERROR), HttpStatus.BAD_REQUEST);
@@ -194,11 +193,6 @@ public class UsuarioService {
         }
 
         usuarioDTO.setUrlImagen(usuarioDTO.getUrlImagen());
-        if (usuarioDTO.getUrlImagen().isEmpty()) {
-            return new ResponseEntity<>(new Message("La url de la imagen no debe estar vacia", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
-        }
-
-        usuarioDTO.setUrlImagen(usuarioDTO.getUrlImagen());
         if (usuarioDTO.getUrlImagen().length() > 2048){
             return new ResponseEntity<>(new Message("La url de la imagen no puede exceder los 2048 caracteres ", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }
@@ -211,7 +205,10 @@ public class UsuarioService {
         Usuario usuario = optional.get();
         usuario.setNombreCompleto(usuarioDTO.getNombreCompleto());
         usuario.setTipoUsuario(usuarioDTO.getTipoUsuario());
-        usuario.setContrasena(usuarioDTO.getContrasena());
+        //usuario.setContrasena(usuarioDTO.getContrasena());
+        if (usuarioDTO.getContrasena() != null && usuarioDTO.getContrasena().isEmpty()) {
+            usuario.setContrasena(passwordEncoder.encode(usuarioDTO.getContrasena()));
+        }
         usuario.setUrlImagen(usuarioDTO.getUrlImagen());
         usuario = usuarioRepository.saveAndFlush(usuario);
 

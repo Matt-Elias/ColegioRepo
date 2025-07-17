@@ -4,6 +4,9 @@ import com.example.ColegioProyect.Usuarios.Model.Usuario;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.time.Instant;
+import java.util.Date;
+
 public class EventoDTO {
     @NotNull(groups = {ModificarEvento.class},message = "Es necesario el id del evento")
     private Long idEvento;
@@ -15,6 +18,10 @@ public class EventoDTO {
 
     @NotBlank(groups = {RegistrarEvento.class, ModificarEvento.class}, message = "Es necesario un color de etiqueta")
     private String colorEtiqueta;
+
+    private Instant fechaInicio;
+
+    private Instant fechaFin;
 
     public interface RegistrarEvento{}
     public interface ModificarEvento{}
@@ -58,6 +65,22 @@ public class EventoDTO {
 
     public Long getIdUsuario() {
         return idUsuario;
+    }
+
+    public Instant getFechaInicio (){
+        return fechaInicio;
+    }
+
+    public void setFechaInicio(Instant fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    public Instant getFechaFin (){
+        return fechaFin;
+    }
+
+    public void setFechaFin(Instant fechaFin) {
+        this.fechaFin = fechaFin;
     }
 
     public void setIdUsuario(Long idUsuario) {
