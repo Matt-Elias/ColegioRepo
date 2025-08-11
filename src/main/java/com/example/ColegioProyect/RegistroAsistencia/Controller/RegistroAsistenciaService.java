@@ -58,8 +58,8 @@ public class RegistroAsistenciaService {
 
         Usuario usuario = usuarioOptional.get();
 
-        if (!"administrador".equalsIgnoreCase(usuario.getTipoUsuario())) {
-            return new ResponseEntity<>(new Message("El tipo de usuario no es correcto, debe ser ADMINISTRADOR", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        if (!"SUBADMIN".equalsIgnoreCase(usuario.getTipoUsuario())) {
+            return new ResponseEntity<>(new Message("El tipo de usuario no es correcto, debe ser ADMINISTRADOR o SUBADMIN", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }
 
         Optional<Estudiante> estudianteOptional = estudianteRepository.findById(registroAsistenciaDTO.getIdEstudiante());

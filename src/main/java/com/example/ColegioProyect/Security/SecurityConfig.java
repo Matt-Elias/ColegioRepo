@@ -79,7 +79,6 @@ public class SecurityConfig {
                                 "/cloudinary/imagen/subir",
                                 "/cloudinary/imagen/eliminar/{publicId}",
 
-                                "/registroAsistencia/crearAsistencia",
                                 "/registroAsistencia/listadoAsistencia",
                                 "/registroAsistencia/asistenciaActual"
                         ).hasAuthority("ADMINISTRADOR")
@@ -91,8 +90,9 @@ public class SecurityConfig {
 
                                 "/notificacionToken/limpiarTokensInvalidos",
                                 "/notificacionToken/registrarDispositivoToken",
-                                "/notificacionToken/enviarNotificacionAsistencia"
-                        ).hasAnyAuthority("PADRE", "ADMINISTRADOR")
+                                "/notificacionToken/enviarNotificacionAsistencia",
+                                "/registroAsistencia/crearAsistencia"
+                        ).hasAnyAuthority("PADRE", "SUBADMIN", "ADMINISTRADOR")
 
                         .requestMatchers(
                                 "/usuario/soloProfesores",

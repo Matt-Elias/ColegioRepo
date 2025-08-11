@@ -25,6 +25,13 @@ public class DataInitializer {
                         return roleRepository.save(nuevoRol);
                     });
 
+            Rol rolSubAdmin = roleRepository.findByRol("SUBADMIN")
+                    .orElseGet(() -> {
+                        Rol nuevoRol = new Rol("SUBADMIN");
+                        nuevoRol.setRol("SUBADMIN");
+                        return roleRepository.save(nuevoRol);
+                    });
+
             // Crear usuario admin si no existe
                 if (!usuarioRepository.existsByCorreoElectronico("20233tn100@utez.edu.mx")) {
                     Usuario usuarioAdministrador = new Usuario();
@@ -42,6 +49,22 @@ public class DataInitializer {
 
                     usuarioRepository.save(usuarioAdministrador);
                     System.out.println("Usuario administrador creado exitosamente");
+                }
+
+                if (!usuarioRepository.existsByCorreoElectronico("adminBilingue@gmail.com")) {
+                    Usuario subAdmin = new Usuario();
+                    subAdmin.setNombreCompleto("Admin Bilingue");
+                    subAdmin.setCorreoElectronico("adminBilingue@gmail.com");
+                    subAdmin.setTipoUsuario("SUBADMIN");
+                    subAdmin.setContrasena(passwordEncoder.encode("Bilingue62575"));
+                    subAdmin.setStatus(true);
+
+                    if (subAdmin.getRoles() == null) {
+                        subAdmin.setRoles(new HashSet<>());
+                    }
+                    subAdmin.getRoles().add(rolSubAdmin);
+
+                    usuarioRepository.save(subAdmin);
                 }
         };
     }

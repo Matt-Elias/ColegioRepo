@@ -107,7 +107,7 @@ public class UsuarioService {
             return new ResponseEntity<>(new Message("Error al registrar usuario", TypesResponse.ERROR), HttpStatus.BAD_REQUEST);
         }
 
-        List<String> usuariosPermitidos = Arrays.asList("estudiante", "padre", "profesor", "administrador");
+        List<String> usuariosPermitidos = Arrays.asList("estudiante", "padre", "profesor", "administrador", "subAdmin");
         String tipoUsuario = usuario.getTipoUsuario().trim().toLowerCase();
 
         if (!usuariosPermitidos.contains(tipoUsuario)) {
@@ -167,7 +167,15 @@ public class UsuarioService {
                     return new ResponseEntity<>(new Message("Error al registrar profesor", TypesResponse.ERROR), HttpStatus.BAD_REQUEST);
                 }
                 break;
+
             case "administrador":
+                break;
+
+            case "subAdmin":
+                /*Rol rolAdmin = roleRepository.findByRol("ADMINISTRADOR")
+                        .orElseGet(()-> roleRepository.save(new Rol("ADMINISTRADOR")));
+                usuario.getRoles().add(rolAdmin);
+                usuarioRepository.save(usuario); */
                 break;
 
                 default:
