@@ -1,7 +1,6 @@
 package com.example.ColegioProyect.Usuarios.Model;
 
 import com.example.ColegioProyect.Estudiantes.Model.Estudiante;
-import com.example.ColegioProyect.Estudiantes.Model.EstudianteDTO;
 import com.example.ColegioProyect.Grado_grupo.Model.GradoGrupo;
 import com.example.ColegioProyect.Padres.Model.Padre;
 import com.example.ColegioProyect.Profesores.Model.Profesor;
@@ -26,7 +25,7 @@ public class UsuarioDTO {
     @NotBlank(groups = {RegistrarUsuario.class, ModificarUsuario.class}, message = "Es necesario un tipo de usuario")
     private String tipoUsuario;
 
-    @NotBlank(groups = {RegistrarUsuario.class, ModificarUsuario.class,IniciarSesion.class}, message = "Es necesario la contraseña")
+    //@NotBlank(groups = {RegistrarUsuario.class, ModificarUsuario.class,IniciarSesion.class}, message = "Es necesario la contraseña")
     private String contrasena;
 
     /*@NotBlank(groups = {RegistrarUsuario.class, ModificarUsuario.class}, message = "Es necesario la URl de la imagen")*/

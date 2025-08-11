@@ -1,11 +1,9 @@
 package com.example.ColegioProyect.Eventos.Model;
 
-import com.example.ColegioProyect.Usuarios.Model.Usuario;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.Instant;
-import java.util.Date;
 
 public class EventoDTO {
     @NotNull(groups = {ModificarEvento.class},message = "Es necesario el id del evento")

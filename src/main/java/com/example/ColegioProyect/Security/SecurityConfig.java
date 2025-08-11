@@ -6,8 +6,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -29,11 +30,21 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
+        http
+                // ... tus otras configuraciones
+                .addFilterAfter((request, response, chain) -> {
+                    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+                    if (auth != null) {
+                        System.out.println("Authorities en la solicitud: " + auth.getAuthorities());
+                    }
+                    chain.doFilter(request, response);
+                }, UsernamePasswordAuthenticationFilter.class);
 
-        http.csrf(AbstractHttpConfigurer::disable)
+        http
+                .csrf(csrf -> csrf.disable()) // Forma moderna de deshabilitar CSRF
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Configuración de CORS
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/login" ).permitAll()
                         .requestMatchers(
                                 "/nivel/consultarNiveles",
                                 "/nivel/cambiarStatus",
@@ -50,11 +61,9 @@ public class SecurityConfig {
                                 "/gradoGrupo/cambiarStatusGradosGrupos",
 
                                 "/usuario/consultarUsuario",
-                                "/usuario/estudianteConPadre",
-                                "/usuario/padreConEstudiante",
-                                "/usuario/soloEstudiantes",
-                                "/usuario/soloPadres",
-                                "/usuario/soloProfesores",
+                                //"/usuario/soloEstudiantes",
+                                //"/usuario/soloPadres",
+                                //"/usuario/soloProfesores",
                                 "/usuario/crearUsuario",
                                 "/usuario/modificarUsuario",
                                 "/usuario/cambiarStatusUsuario",
@@ -68,9 +77,33 @@ public class SecurityConfig {
                                 "/evento/modificarEvento",
 
                                 "/cloudinary/imagen/subir",
-                                "/cloudinary/imagen/eliminar/{publicId}"
+                                "/cloudinary/imagen/eliminar/{publicId}",
 
+                                "/registroAsistencia/crearAsistencia",
+                                "/registroAsistencia/listadoAsistencia",
+                                "/registroAsistencia/asistenciaActual"
                         ).hasAuthority("ADMINISTRADOR")
+
+                        .requestMatchers(
+                                "/usuario/soloPadres",
+                                "/usuario/buscarPadre/{idUsuario}",
+                                "/usuario/buscarEstudiante/{idUsuario}",
+
+                                "/notificacionToken/limpiarTokensInvalidos",
+                                "/notificacionToken/registrarDispositivoToken",
+                                "/notificacionToken/enviarNotificacionAsistencia"
+                        ).hasAnyAuthority("PADRE", "ADMINISTRADOR")
+
+                        .requestMatchers(
+                                "/usuario/soloProfesores",
+                                "/usuario/buscarProfesor/{idUsuario}"
+                        )
+                        .hasAnyAuthority("PROFESOR", "ADMINISTRADOR")
+
+                        .requestMatchers(
+                                "/usuario/soloEstudiantes"
+                        ).hasAnyAuthority("ESTUDIANTE", "ADMINISTRADOR")
+
                         .anyRequest().authenticated()
 
                 ).sessionManagement(session-> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -82,7 +115,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173", "http://192.168.1.93:8080", "http://localhost:8081"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173", "http://192.168.1.93:8080", "http://localhost:8081", "http://192.168.1.93:8081"));
         configuration.setAllowedMethods(Arrays.asList( "GET", "POST", "PUT", "DELETE", "OPTIONS" ));
         configuration.setAllowedHeaders(Arrays.asList( "Content-Type", "Authorization" ));
         configuration.setExposedHeaders(Arrays.asList( "Authorization" ));
