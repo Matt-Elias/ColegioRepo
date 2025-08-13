@@ -77,10 +77,8 @@ public class SecurityConfig {
                                 "/evento/modificarEvento",
 
                                 "/cloudinary/imagen/subir",
-                                "/cloudinary/imagen/eliminar/{publicId}",
+                                "/cloudinary/imagen/eliminar/{publicId}"
 
-                                "/registroAsistencia/listadoAsistencia",
-                                "/registroAsistencia/asistenciaActual"
                         ).hasAuthority("ADMINISTRADOR")
 
                         .requestMatchers(
@@ -89,9 +87,7 @@ public class SecurityConfig {
                                 "/usuario/buscarEstudiante/{idUsuario}",
 
                                 "/notificacionToken/limpiarTokensInvalidos",
-                                "/notificacionToken/registrarDispositivoToken",
-                                "/notificacionToken/enviarNotificacionAsistencia",
-                                "/registroAsistencia/crearAsistencia"
+                                "/notificacionToken/registrarDispositivoToken"
                         ).hasAnyAuthority("PADRE", "SUBADMIN", "ADMINISTRADOR")
 
                         .requestMatchers(
@@ -103,6 +99,13 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/usuario/soloEstudiantes"
                         ).hasAnyAuthority("ESTUDIANTE", "ADMINISTRADOR")
+
+                        .requestMatchers(
+                                "/registroAsistencia/listadoAsistencia",
+                                "/registroAsistencia/asistenciaActual",
+                                "/notificacionToken/enviarNotificacionAsistencia",
+                                "/registroAsistencia/crearAsistencia"
+                        ).hasAnyAuthority("SUBADMIN", "ADMINISTRADOR")
 
                         .anyRequest().authenticated()
 

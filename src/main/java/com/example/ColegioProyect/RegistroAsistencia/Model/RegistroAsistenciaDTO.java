@@ -41,7 +41,7 @@ public class RegistroAsistenciaDTO {
         return fechaHora;
     }
 
-    public void setFechaHora(Instant fechaInicio) {
+    public void setFechaHora(Instant fechaHora) {
         this.fechaHora = fechaHora;
     }
 

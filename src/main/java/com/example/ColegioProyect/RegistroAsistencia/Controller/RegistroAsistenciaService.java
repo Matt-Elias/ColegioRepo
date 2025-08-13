@@ -67,9 +67,14 @@ public class RegistroAsistenciaService {
             return new ResponseEntity<>(new Message("No se encontro el id del estudiante", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
         }
 
+        // Validar que la fecha/hora no sea nula
+        if (registroAsistenciaDTO.getFechaHora() == null) {
+            return new ResponseEntity<>(new Message("La fecha y hora son obligatorias", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        }
+
         Estudiante estudiante = estudianteOptional.get();
 
-        RegistroAsistencia registroAsistencia = new RegistroAsistencia(usuario, Instant.now() ,registroAsistenciaDTO.getRegistro(), estudiante);
+        RegistroAsistencia registroAsistencia = new RegistroAsistencia(usuario, registroAsistenciaDTO.getFechaHora() ,registroAsistenciaDTO.getRegistro(), estudiante);
         registroAsistencia = registroAsistenciaRespository.saveAndFlush(registroAsistencia);
 
         if (registroAsistencia == null) {
