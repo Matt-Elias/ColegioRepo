@@ -208,10 +208,10 @@ public class UsuarioService {
             return new ResponseEntity<>(new Message("La contraseña no debe exceder los 70 caracteres y no debe ser estar vacio", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }*/
 
-        usuarioDTO.setUrlImagen(usuarioDTO.getUrlImagen());
+        /*usuarioDTO.setUrlImagen(usuarioDTO.getUrlImagen());
         if (usuarioDTO.getUrlImagen().length() > 2048){
             return new ResponseEntity<>(new Message("La url de la imagen no puede exceder los 2048 caracteres ", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
-        }
+        }*/
 
         Optional<Usuario> optional = usuarioRepository.findById(usuarioDTO.getIdUsuario());
         if (!optional.isPresent()) {

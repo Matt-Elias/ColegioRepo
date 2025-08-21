@@ -33,12 +33,12 @@ public class DataInitializer {
                     });
 
             // Crear usuario admin si no existe
-                if (!usuarioRepository.existsByCorreoElectronico("20233tn100@utez.edu.mx")) {
+                if (!usuarioRepository.existsByCorreoElectronico("webBilingue@gmail.com")) {
                     Usuario usuarioAdministrador = new Usuario();
-                    usuarioAdministrador.setNombreCompleto("Elias Manuel Marquez Bailon");
-                    usuarioAdministrador.setCorreoElectronico("20233tn100@utez.edu.mx");
+                    usuarioAdministrador.setNombreCompleto("Javier Martinez Solorio");
+                    usuarioAdministrador.setCorreoElectronico("webBilingue@gmail.com");
                     usuarioAdministrador.setTipoUsuario("ADMINISTRADOR");
-                    usuarioAdministrador.setContrasena(passwordEncoder.encode("pablo1"));
+                    usuarioAdministrador.setContrasena(passwordEncoder.encode("Colegio13082025"));
                     usuarioAdministrador.setUrlImagen("Algo");
                     usuarioAdministrador.setStatus(true);
 
@@ -53,7 +53,7 @@ public class DataInitializer {
 
                 if (!usuarioRepository.existsByCorreoElectronico("adminBilingue@gmail.com")) {
                     Usuario subAdmin = new Usuario();
-                    subAdmin.setNombreCompleto("Admin Bilingue");
+                    subAdmin.setNombreCompleto("Personal Administrativo");
                     subAdmin.setCorreoElectronico("adminBilingue@gmail.com");
                     subAdmin.setTipoUsuario("SUBADMIN");
                     subAdmin.setContrasena(passwordEncoder.encode("Bilingue62575"));

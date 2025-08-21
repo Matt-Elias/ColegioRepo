@@ -46,10 +46,10 @@ public class GradoGrupoService {
             return new ResponseEntity<>(new Message("El nombre del grado y grupo no puede exceder los 20 caracteres", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }
 
-        Optional<GradoGrupo> gradoGrupoOptional = gradoGrupoRepository.findByGradoGrupoaAndIdGradoGrupo(gradoGrupoDTO.getGradoGrupo(), 0L);
+        /*Optional<GradoGrupo> gradoGrupoOptional = gradoGrupoRepository.findByGradoGrupoaAndIdGradoGrupo(gradoGrupoDTO.getGradoGrupo(), 0L);
         if (gradoGrupoOptional.isPresent()) {
             return new ResponseEntity<>(new Message("El grado y grupo ya existe, porfavor seleccione otros datos", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
-        }
+        }*/
 
         Optional<Nivel> optionalNivel = nivelRepository.findById(gradoGrupoDTO.getNivel().getIdNivel());
         if (!optionalNivel.isPresent()) {
