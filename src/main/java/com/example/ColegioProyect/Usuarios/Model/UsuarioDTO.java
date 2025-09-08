@@ -1,13 +1,14 @@
 package com.example.ColegioProyect.Usuarios.Model;
 
 import com.example.ColegioProyect.Estudiantes.Model.Estudiante;
-import com.example.ColegioProyect.Estudiantes.Model.EstudianteDTO;
 import com.example.ColegioProyect.Grado_grupo.Model.GradoGrupo;
 import com.example.ColegioProyect.Padres.Model.Padre;
 import com.example.ColegioProyect.Profesores.Model.Profesor;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+
+import java.util.List;
 
 public class UsuarioDTO {
 
@@ -24,10 +25,10 @@ public class UsuarioDTO {
     @NotBlank(groups = {RegistrarUsuario.class, ModificarUsuario.class}, message = "Es necesario un tipo de usuario")
     private String tipoUsuario;
 
-    @NotBlank(groups = {RegistrarUsuario.class, ModificarUsuario.class,IniciarSesion.class}, message = "Es necesario la contraseña")
+    //@NotBlank(groups = {RegistrarUsuario.class, ModificarUsuario.class,IniciarSesion.class}, message = "Es necesario la contraseña")
     private String contrasena;
 
-    @NotBlank(groups = {RegistrarUsuario.class, ModificarUsuario.class}, message = "Es necesario la URl de la imagen")
+    /*@NotBlank(groups = {RegistrarUsuario.class, ModificarUsuario.class}, message = "Es necesario la URl de la imagen")*/
     private String urlImagen;
 
     private Estudiante estudiante;
@@ -44,6 +45,8 @@ public class UsuarioDTO {
 
     //@NotNull(groups = {RegistrarUsuario.class, ModificarUsuario.class}, message = "Es necesario el grado  y el grupo del estudiante")
     private GradoGrupo gradoGrupo;
+
+    private List<String> roles;
 
     public UsuarioDTO () {}
 
@@ -141,6 +144,14 @@ public class UsuarioDTO {
 
     public void setGradoGrupo(GradoGrupo gradoGrupo) {
         this.gradoGrupo = gradoGrupo;
+    }
+
+    public List<String> getRoles (){
+        return roles;
+    }
+
+    public void SetRoles(List<String> roles){
+        this.roles = roles;
     }
 
     public interface RegistrarUsuario {}

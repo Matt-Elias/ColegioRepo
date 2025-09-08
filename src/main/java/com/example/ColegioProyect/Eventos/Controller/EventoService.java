@@ -66,7 +66,10 @@ public class EventoService {
         if (!"administrador".equalsIgnoreCase(usuario.getTipoUsuario())) {
             return new ResponseEntity<>(new Message("El usuario no es correcto", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }
-        Evento evento = new Evento(eventoDTO.getTitulo(), eventoDTO.getDescripcion(), eventoDTO.getColorEtiqueta(), usuario);
+
+        //Evento evento = new Evento(eventoDTO.getTitulo(), eventoDTO.getDescripcion(), eventoDTO.getColorEtiqueta(), usuario);
+        //evento = eventoRepository.saveAndFlush(evento);
+        Evento evento = new Evento(eventoDTO.getTitulo(), eventoDTO.getDescripcion(), eventoDTO.getFechaInicio(), eventoDTO.getFechaFin(), eventoDTO.getColorEtiqueta(), usuario);
         evento = eventoRepository.saveAndFlush(evento);
 
         if (evento == null) {
@@ -113,6 +116,8 @@ public class EventoService {
         Evento evento = eventoOptional.get();
         evento.setTitulo(eventoDTO.getTitulo());
         evento.setDescripcion(eventoDTO.getDescripcion());
+        evento.setFechaInicio(eventoDTO.getFechaInicio());
+        evento.setFechaFin(eventoDTO.getFechaFin());
         evento.setColorEtiqueta(eventoDTO.getColorEtiqueta());
         evento.setUsuario(usuario);
         if (evento == null) {

@@ -47,8 +47,8 @@ public class MateriaService {
         }
 
         materiaDTO.setAsignaciones(materiaDTO.getAsignaciones());
-        if (materiaDTO.getAsignaciones() == 0 || materiaDTO.getAsignaciones() < 0) {
-            return new ResponseEntity<>(new Message("La asignacion no puede ser 0 o un numero negativo",TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        if (materiaDTO.getAsignaciones() < 0) {
+            return new ResponseEntity<>(new Message("La asignacion no puede tener un numero negativo",TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }
 
         Optional<Usuario> usuarioOptional = usuarioRepository.findById(materiaDTO.getProfesor().getIdProfesor());
@@ -76,8 +76,8 @@ public class MateriaService {
         }
 
         materiaDTO.setAsignaciones(materiaDTO.getAsignaciones());
-        if (materiaDTO.getAsignaciones() == 0 || materiaDTO.getAsignaciones() < 0) {
-            return new ResponseEntity<>(new Message("La asignacion no puede ser 0 o un numero negativo",TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        if (materiaDTO.getAsignaciones() < 0) {
+            return new ResponseEntity<>(new Message("La asignacion no puede tener un numero negativo",TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }
 
         Optional<Usuario> usuarioOptional = usuarioRepository.findById(materiaDTO.getProfesor().getIdProfesor());

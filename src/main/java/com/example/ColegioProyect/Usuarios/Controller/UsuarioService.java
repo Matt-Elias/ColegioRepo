@@ -6,6 +6,8 @@ import com.example.ColegioProyect.Padres.Model.Padre;
 import com.example.ColegioProyect.Padres.Model.PadreRepository;
 import com.example.ColegioProyect.Profesores.Model.Profesor;
 import com.example.ColegioProyect.Profesores.Model.ProfesorRespository;
+import com.example.ColegioProyect.Roles.Rol;
+import com.example.ColegioProyect.Roles.RoleRepository;
 import com.example.ColegioProyect.Usuarios.Model.Usuario;
 import com.example.ColegioProyect.Usuarios.Model.UsuarioDTO;
 import com.example.ColegioProyect.Usuarios.Model.UsuarioRepository;
@@ -16,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,13 +37,17 @@ public class UsuarioService {
     public final EstudianteRepository estudianteRepository;
     public final PadreRepository padreRepository;
     public final ProfesorRespository profesorRespository;
+    public final RoleRepository roleRepository;
+    public final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UsuarioService(UsuarioRepository usuarioRepository, EstudianteRepository estudianteRepository, PadreRepository padreRepository, ProfesorRespository profesorRespository) {
+    public UsuarioService(UsuarioRepository usuarioRepository, EstudianteRepository estudianteRepository, PadreRepository padreRepository, ProfesorRespository profesorRespository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
         this.estudianteRepository = estudianteRepository;
         this.padreRepository = padreRepository;
         this.profesorRespository = profesorRespository;
+        this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional(readOnly = true)
@@ -48,29 +55,6 @@ public class UsuarioService {
         logger.info("Ejecutando funcion de: Obteniendo los usuarios");
         return new ResponseEntity<>(new Message(usuarioRepository.findAll(), "Listado de usuarios", TypesResponse.SUCCESS), HttpStatus.OK);
     }
-
-    @Transactional
-    public ResponseEntity<Object> estudiantesConPadres(){
-        logger.info("Ejecutando funcion de: Estudiantes con padres");
-        List<Object[]> resultado = usuarioRepository.findEstudiantesConPadresRaw();
-
-        if (resultado.isEmpty()) {
-            return new ResponseEntity<>(new Message("No se encontraron datos de estudiantes con padres", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(new Message(usuarioRepository.findAll(), "Listado de estudiantes con padres", TypesResponse.SUCCESS), HttpStatus.OK);
-    }
-
-    @Transactional
-    public ResponseEntity<Object> padresConEstudiantes(){
-        logger.info("Ejecutando funcion de: Padres con estudiantes");
-        List<Object[]> resultado = usuarioRepository.findPadresConEstudiantesRaw();
-
-        if (resultado.isEmpty()) {
-            return new ResponseEntity<>(new Message("No se encontraron datos de padres con estudiantes", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(new Message(usuarioRepository.findAll(),"Listado de padres con estudidantes", TypesResponse.SUCCESS), HttpStatus.OK);
-    }
-
 
     @Transactional(rollbackFor = {SQLException.class})
     public ResponseEntity<Object> registrarUsuario(UsuarioDTO usuarioDTO) {
@@ -97,8 +81,8 @@ public class UsuarioService {
         }
 
         usuarioDTO.setUrlImagen(usuarioDTO.getUrlImagen());
-        if (usuarioDTO.getUrlImagen().length() > 70 || usuarioDTO.getUrlImagen().isEmpty()) {
-            return new ResponseEntity<>(new Message("La url de la imagen no puede exceder los 70 caracteres y no debe estar vacio", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        if (usuarioDTO.getUrlImagen().length() > 2048){
+            return new ResponseEntity<>(new Message("La url de la imagen no puede exceder los 2048 caracteres ", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }
 
         Optional<Usuario> optionalUsuario = usuarioRepository.searchByCorreoElectronico(usuarioDTO.getCorreoElectronico(), 0L);
@@ -106,13 +90,24 @@ public class UsuarioService {
             return new ResponseEntity<>(new Message("El correo ya existe, porfavor cambielo por otro", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }
 
-        Usuario usuario = new Usuario(usuarioDTO.getNombreCompleto(), usuarioDTO.getCorreoElectronico(),usuarioDTO.getTipoUsuario(), true, usuarioDTO.getContrasena(), usuarioDTO.getUrlImagen());
+        String tipoUsuarioUpper = usuarioDTO.getTipoUsuario().trim().toUpperCase();
+
+        Rol rolUsuario = roleRepository.findByRol(tipoUsuarioUpper)
+                .orElseGet(()-> {
+                    Rol nuevoRol = new Rol(tipoUsuarioUpper);
+                    return roleRepository.saveAndFlush(nuevoRol);
+                });
+
+        String contrasenaEncriptada = passwordEncoder.encode(usuarioDTO.getContrasena());
+
+        Usuario usuario = new Usuario(usuarioDTO.getNombreCompleto(), usuarioDTO.getCorreoElectronico(),usuarioDTO.getTipoUsuario(), true, contrasenaEncriptada, usuarioDTO.getUrlImagen(), rolUsuario);
         usuario = usuarioRepository.saveAndFlush(usuario);
+
         if (usuario == null) {
             return new ResponseEntity<>(new Message("Error al registrar usuario", TypesResponse.ERROR), HttpStatus.BAD_REQUEST);
         }
 
-        List<String> usuariosPermitidos = Arrays.asList("estudiante", "padre", "profesor", "administrador");
+        List<String> usuariosPermitidos = Arrays.asList("estudiante", "padre", "profesor", "administrador", "subAdmin");
         String tipoUsuario = usuario.getTipoUsuario().trim().toLowerCase();
 
         if (!usuariosPermitidos.contains(tipoUsuario)) {
@@ -121,6 +116,12 @@ public class UsuarioService {
 
         switch (usuarioDTO.getTipoUsuario().trim().toLowerCase()) {
             case "estudiante":
+
+                Rol rolEstudiante = roleRepository.findByRol("ESTUDIANTE")
+                        .orElseGet(()-> roleRepository.save(new Rol("ESTUDIANTE")));
+                usuario.getRoles().add(rolEstudiante);
+                usuarioRepository.save(usuario);
+
                 Estudiante estudiante = new Estudiante();
                 estudiante.setUsuario(usuario);
                 estudiante.setMatricula(usuarioDTO.getEstudiante().getMatricula());
@@ -138,6 +139,12 @@ public class UsuarioService {
                 if (!estudiantePadre.isPresent()) {
                     return new ResponseEntity<>(new Message("El estudiante no se enocntro o no existe", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
                 }
+
+                Rol rolPadre = roleRepository.findByRol("PADRE")
+                        .orElseGet(()-> roleRepository.save(new Rol("PADRE")));
+                usuario.getRoles().add(rolPadre);
+                usuarioRepository.save(usuario);
+
                 Padre padre = new Padre(usuario, estudiantePadre.get());
                 padre = padreRepository.saveAndFlush(padre);
 
@@ -147,6 +154,11 @@ public class UsuarioService {
                 break;
 
             case "profesor":
+                Rol rolProfesor = roleRepository.findByRol("PROFESOR")
+                        .orElseGet(()-> roleRepository.save(new Rol("PROFESOR")));
+                usuario.getRoles().add(rolProfesor);
+                usuarioRepository.save(usuario);
+
                 Profesor profesor = new Profesor();
                 profesor.setUsuario(usuario);
                 profesor = profesorRespository.saveAndFlush(profesor);
@@ -155,7 +167,15 @@ public class UsuarioService {
                     return new ResponseEntity<>(new Message("Error al registrar profesor", TypesResponse.ERROR), HttpStatus.BAD_REQUEST);
                 }
                 break;
+
             case "administrador":
+                break;
+
+            case "subAdmin":
+                /*Rol rolAdmin = roleRepository.findByRol("ADMINISTRADOR")
+                        .orElseGet(()-> roleRepository.save(new Rol("ADMINISTRADOR")));
+                usuario.getRoles().add(rolAdmin);
+                usuarioRepository.save(usuario); */
                 break;
 
                 default:
@@ -183,15 +203,15 @@ public class UsuarioService {
             return new ResponseEntity<>(new Message("El tipo de usuario no puede exceder los 40 caracteres y no debe estar vacio", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
         }
 
-        usuarioDTO.setContrasena(usuarioDTO.getContrasena());
-        if (usuarioDTO.getContrasena().length() > 30 || usuarioDTO.getContrasena().isEmpty()) {
-            return new ResponseEntity<>(new Message("La contraseña no debe exceder los 30 caracteres y no debe ser estar vacio", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
-        }
+        /*usuarioDTO.setContrasena(usuarioDTO.getContrasena());
+        if (usuarioDTO.getContrasena() != null && !usuarioDTO.getContrasena().isEmpty()) {
+            return new ResponseEntity<>(new Message("La contraseña no debe exceder los 70 caracteres y no debe ser estar vacio", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        }*/
 
-        usuarioDTO.setUrlImagen(usuarioDTO.getUrlImagen());
-        if (usuarioDTO.getUrlImagen().length() > 70 || usuarioDTO.getUrlImagen().isEmpty()) {
-            return new ResponseEntity<>(new Message("La url de la imagen no puede exceder los 70 caracteres y no debe estar vacio", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
-        }
+        /*usuarioDTO.setUrlImagen(usuarioDTO.getUrlImagen());
+        if (usuarioDTO.getUrlImagen().length() > 2048){
+            return new ResponseEntity<>(new Message("La url de la imagen no puede exceder los 2048 caracteres ", TypesResponse.WARNING), HttpStatus.BAD_REQUEST);
+        }*/
 
         Optional<Usuario> optional = usuarioRepository.findById(usuarioDTO.getIdUsuario());
         if (!optional.isPresent()) {
@@ -201,7 +221,14 @@ public class UsuarioService {
         Usuario usuario = optional.get();
         usuario.setNombreCompleto(usuarioDTO.getNombreCompleto());
         usuario.setTipoUsuario(usuarioDTO.getTipoUsuario());
-        usuario.setContrasena(usuarioDTO.getContrasena());
+        //usuario.setContrasena(usuarioDTO.getContrasena());
+        if (usuarioDTO.getContrasena() != null && !usuarioDTO.getContrasena().isEmpty()) {
+            if (usuarioDTO.getContrasena().length() > 70) {
+                return new ResponseEntity<>(new Message("La contraseña no debe exceder los 30 caracteres", TypesResponse.WARNING ), HttpStatus.BAD_REQUEST);
+            }
+
+            usuario.setContrasena(passwordEncoder.encode(usuarioDTO.getContrasena()));
+        }
         usuario.setUrlImagen(usuarioDTO.getUrlImagen());
         usuario = usuarioRepository.saveAndFlush(usuario);
 
@@ -337,6 +364,39 @@ public class UsuarioService {
             return new ResponseEntity<>(new Message("No se encontraron profesores registrados", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(new Message(usuarioRepository.findAllByProfesor(),"Listado de profesores", TypesResponse.SUCCESS), HttpStatus.OK);
+    }
+
+    @Transactional
+    public ResponseEntity<Object> soloIdPadre (Long idUsuario) {
+        logger.info("Ejecutando funcion de: obtener solo id padre");
+        List<Object[]> idPadre = usuarioRepository.findByIdUsuarioAndPadre(idUsuario);
+
+        if (idPadre.isEmpty()) {
+            return new ResponseEntity<>(new Message("No se encontro el id del padre", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(new Message(usuarioRepository.findByIdUsuarioAndPadre(idUsuario), "Id del padre encontrado", TypesResponse.SUCCESS), HttpStatus.OK);
+    }
+
+    @Transactional
+    public ResponseEntity<Object> soloIdProfesor (Long idUsuario) {
+        logger.info("Ejecutando funcion de: obtener solo id profesor");
+        List<Object[]> idProfesor = usuarioRepository.findByIdUsuarioAndProfesor(idUsuario);
+
+        if (idProfesor.isEmpty()) {
+            return new ResponseEntity<>(new Message("No se encontro el id del profesor", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(new Message(usuarioRepository.findByIdUsuarioAndProfesor(idUsuario), "Id del profesor encontrado", TypesResponse.SUCCESS), HttpStatus.OK);
+    }
+
+    @Transactional
+    public ResponseEntity<Object> soloIdEstudiante (Long idUsuario) {
+        logger.info("Ejecutando funcion de: obtener solo id estudiante");
+        List<Object[]> idEstudiante = usuarioRepository.findByIdUsuarioAndEstudiante(idUsuario);
+
+        if (idEstudiante.isEmpty()) {
+            return new ResponseEntity<>(new Message("No se encontro el id del estudiante", TypesResponse.WARNING), HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(new Message(usuarioRepository.findByIdUsuarioAndEstudiante(idUsuario), "Id del estudiante encontrado", TypesResponse.SUCCESS), HttpStatus.OK);
     }
 
 }

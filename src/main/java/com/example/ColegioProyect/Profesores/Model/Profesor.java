@@ -1,9 +1,7 @@
 package com.example.ColegioProyect.Profesores.Model;
 
-import com.example.ColegioProyect.Conversaciones.Model.Conversacion;
 import com.example.ColegioProyect.Materias.Model.Materia;
 import com.example.ColegioProyect.Usuarios.Model.Usuario;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -27,10 +25,6 @@ public class Profesor {
     @OneToMany(mappedBy = "profesor")
     @JsonIgnore
     private List<Materia> materia;
-
-    @OneToMany(mappedBy = "profesor")
-    @JsonIgnore
-    private List<Conversacion> conversacion;
 
     public Profesor() {}
 
@@ -56,14 +50,6 @@ public class Profesor {
 
     public void setMateria(List<Materia> materia) {
         this.materia = materia;
-    }
-
-    public List<Conversacion> getConversacion() {
-        return conversacion;
-    }
-
-    public void setConversacion(List<Conversacion> conversacion) {
-        this.conversacion = conversacion;
     }
 
 }

@@ -5,6 +5,7 @@ import com.example.ColegioProyect.Padres.Model.Padre;
 import com.example.ColegioProyect.Profesores.Model.Profesor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.validation.ObjectError;
 
@@ -88,4 +89,67 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
             "on u_profesor.id_usuario = p.id_profesor", nativeQuery = true)
     List<Object[]>findAllByProfesor();
 
+    @Query(value = "select\n" +
+            "    u.id_usuario,\n" +
+            "    u.contrasena,\n" +
+            "    u.correo_electronico,\n" +
+            "    u.nombre_completo,\n" +
+            "    u.fecha_alta,\n" +
+            "    u.status,\n" +
+            "    u.tipo_usuario,\n" +
+            "    u.url_imagen,\n" +
+            "    p.estudiante_id_estudiante,\n" +
+            "    e.grado_grupo_id_grado_grupo\n" +
+            "from usuario u\n" +
+            "join padre p on u.id_usuario = p.id_padre\n" +
+            "join estudiante e on p.estudiante_id_estudiante = e.id_estudiante\n" +
+            "where u.id_usuario = ?;" , nativeQuery = true)
+    List<Object[]> findByIdUsuarioAndPadre(@Param("idUsuario") Long idUsuario);
+
+    @Query(value = "select\n" +
+            "    u.id_usuario,\n" +
+            "    u.contrasena,\n" +
+            "    u.correo_electronico,\n" +
+            "    u.nombre_completo,\n" +
+            "    u.fecha_alta,\n" +
+            "    u.status,\n" +
+            "    u.tipo_usuario,\n" +
+            "    u.url_imagen,\n" +
+            "    pr.id_profesor,\n" +
+            "    m.id_materia,\n" +
+            "    m.nombre_materia\n" +
+            "from usuario u\n" +
+            "join profesor pr on u.id_usuario = pr.id_profesor\n" +
+            "join materia m on pr.id_profesor = m.profesor_id_profesor\n" +
+            "where u.id_usuario = ?;", nativeQuery = true)
+    List<Object[]> findByIdUsuarioAndProfesor(@Param("idUsuario") Long idUsuario);
+
+    @Query(value= "select\n" +
+            "    u.id_usuario,\n" +
+            "    u.contrasena,\n" +
+            "    u.correo_electronico,\n" +
+            "    u.nombre_completo,\n" +
+            "    u.fecha_alta,\n" +
+            "    u.status,\n" +
+            "    u.tipo_usuario,\n" +
+            "    u.url_imagen,\n" +
+            "    e.id_estudiante,\n" +
+            "    e.grado_grupo_id_grado_grupo,\n" +
+            "    e.matricula,\n" +
+            "    e.tipo,\n" +
+            "    gg.id_grado_grupo,\n" +
+            "    gg.grado_grupo,\n" +
+            "    n.id_nivel,\n" +
+            "    n.nivel_academico\n" +
+            "from usuario u\n" +
+            "join estudiante e\n" +
+            "on u.id_usuario = e.id_estudiante\n" +
+            "join grado_grupo gg on e.grado_grupo_id_grado_grupo = gg.id_grado_grupo\n" +
+            "join nivel n on gg.nivel_id_nivel = n.id_nivel\n" +
+            "where u.id_usuario = ?;", nativeQuery = true)
+    List<Object[]> findByIdUsuarioAndEstudiante(@Param("idUsuario") Long idUsuario);
+
+    Optional<Usuario> findByCorreoElectronico(String correoElectronico);
+
+    boolean existsByCorreoElectronico(String correoElectronico);
 }

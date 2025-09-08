@@ -2,8 +2,10 @@ package com.example.ColegioProyect.Usuarios.Model;
 
 import com.example.ColegioProyect.Estudiantes.Model.Estudiante;
 import com.example.ColegioProyect.Eventos.Model.Evento;
+import com.example.ColegioProyect.NotificacionToken.Model.NotificacionToken;
 import com.example.ColegioProyect.Padres.Model.Padre;
 import com.example.ColegioProyect.Profesores.Model.Profesor;
+import com.example.ColegioProyect.RegistroAsistencia.Model.RegistroAsistencia;
 import com.example.ColegioProyect.Roles.Rol;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -34,10 +36,10 @@ public class Usuario {
     @Column(name = "status", columnDefinition = "BOOL DEFAULT TRUE")
     private boolean status;
 
-    @Column(name = "contrasena", columnDefinition = "VARCHAR(45)")
+    @Column(name = "contrasena", columnDefinition = "VARCHAR(100)", nullable = false)
     private String contrasena;
 
-    @Column(name = "urlImagen", columnDefinition = "VARCHAR(70)")
+    @Column(name = "urlImagen", columnDefinition = "VARCHAR(2048)")
     private String urlImagen;
 
     //APARTADO PARA ROL
@@ -71,6 +73,14 @@ public class Usuario {
     @JsonIgnore
     private Profesor profesor;
 
+    @OneToMany(mappedBy = "usuario")
+    @JsonIgnore
+    private List<RegistroAsistencia> registroAsistencias;
+
+    @OneToMany(mappedBy = "usuario")
+    @JsonIgnore
+    private List<NotificacionToken> notificacionTokens;
+
     public Usuario() {}
 
     public Usuario(String nombreCompleto, String correoElectronico, String tipoUsuario, boolean status, String contrasena, String urlImagen) {
@@ -80,6 +90,17 @@ public class Usuario {
         this.status = status;
         this.contrasena = contrasena;
         this.urlImagen = urlImagen;
+    }
+
+    public Usuario(String nombreCompleto, String correoElectronico, String tipoUsuario, boolean status, String contrasena, String urlImagen, Rol rol) {
+        this.nombreCompleto = nombreCompleto;
+        this.correoElectronico = correoElectronico;
+        this.tipoUsuario = tipoUsuario;
+        this.status = status;
+        this.contrasena = contrasena;
+        this.urlImagen = urlImagen;
+        this.roles = new HashSet<>();
+        this.roles.add(rol);
     }
 
     public Usuario(Long idUsuario, String nombreCompleto, String correoElectronico, String tipoUsuario, boolean status, String contrasena, String urlImagen) {
@@ -196,4 +217,19 @@ public class Usuario {
         this.urlImagen = urlImagen;
     }
 
+    public List<RegistroAsistencia> getRegistroAsistencias() {
+        return registroAsistencias;
+    }
+
+    public void setRegistroAsistencias(List<RegistroAsistencia> registroAsistencias) {
+        this.registroAsistencias = registroAsistencias;
+    }
+
+    public List<NotificacionToken> getNotificacionTokens() {
+        return notificacionTokens;
+    }
+
+    public void setNotificacionTokens(List<NotificacionToken> notificacionTokens) {
+        this.notificacionTokens = notificacionTokens;
+    }
 }

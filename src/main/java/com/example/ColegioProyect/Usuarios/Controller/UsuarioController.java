@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/usuario")
-@CrossOrigin(origins = {"*"}, methods = {RequestMethod.POST, RequestMethod.GET, RequestMethod.PUT, RequestMethod.DELETE})
 public class UsuarioController {
 
     public final UsuarioService usuarioService;
@@ -22,16 +21,6 @@ public class UsuarioController {
     @GetMapping("/consultarUsuario")
     public ResponseEntity<Object> consultarUsuarios() {
         return usuarioService.obtenerTodosLosUsuarios();
-    }
-
-    @GetMapping("/estudianteConPadre")
-    public ResponseEntity<Object>estudianteConPadre(){
-        return usuarioService.estudiantesConPadres();
-    }
-
-    @GetMapping("/padreConEstudiante")
-    public ResponseEntity<Object> padreConEstudiante(){
-        return usuarioService.padresConEstudiantes();
     }
 
     @GetMapping("/soloEstudiantes")
@@ -47,6 +36,21 @@ public class UsuarioController {
     @GetMapping("/soloProfesores")
     public ResponseEntity<Object>listadoProfesores(){
         return usuarioService.obtenerSoloProfesores();
+    }
+
+    @GetMapping("/buscarPadre/{idUsuario}")
+    public ResponseEntity<Object>listadoIdPadre(@PathVariable Long idUsuario){
+        return usuarioService.soloIdPadre(idUsuario);
+    }
+
+    @GetMapping("/buscarProfesor/{idUsuario}")
+    public ResponseEntity<Object>listadoIdProfesor(@PathVariable Long idUsuario){
+        return usuarioService.soloIdProfesor(idUsuario);
+    }
+
+    @GetMapping("/buscarEstudiante/{idUsuario}")
+    public ResponseEntity<Object>listadoIdEstudiante(@PathVariable Long idUsuario){
+        return usuarioService.soloIdEstudiante(idUsuario);
     }
 
     @PostMapping("/crearUsuario")
